@@ -1,0 +1,5 @@
+# Export models
+export(dominanceDecay, dominancePreemp, MacArthurFraction, powerFraction, randAssort, randFraction)
+
+# Export fitting function
+export(fitmodel, fitmodelCl, findPFw)

@@ -1,0 +1,13 @@
+Package: nicheApport
+Type: Package
+Title: Tokeshi's Niche Apportionment Species Abundance Distributions Models
+Author: Mario J. Marques-Azevedo
+Maintainer: Mario J. Marques-Azevedo <mariojmaaz@gmail.com>
+Description: Simulate and fit, using Monte Carlo approach, rank abundance distribution to niche apportionment species abundance distributions models.
+License: GPL-2
+Encoding: UTF-8
+Depends: parallel
+NeedsCompilation: no
+Version: 1.0
+Date: 2014-10-20
+URL: https://github.com/mariojose/nicheApport
