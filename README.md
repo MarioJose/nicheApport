@@ -5,7 +5,7 @@
 **Mario Jose Marques-Azevedo**
 
 ### Description
-nicheApport simulate and fit the stochastic niche-oriented species abundance distribution models proposed by Tokeshi (1990, 1996). The package nicheApport simulate species rank abundance distributions (RADs) and use Monte Carlo approach, proposed by Bersier & Sugihara (1997) and improved by Cassey & King (2001) and Mouillot et al. (2003), to fit models to replicated data.
+*nicheApport* simulate and fit the stochastic niche-oriented species abundance distribution models proposed by Tokeshi (1990, 1996). The package *nicheApport* simulate species rank abundance distributions (RADs) and use Monte Carlo approach, proposed by Bersier & Sugihara (1997) and improved by Cassey & King (2001) and Mouillot et al. (2003), to fit models to replicated data.
 
 The nicheApport package provides:
  * Simulate species abundance models: Dominance Decay, Dominance Preemption, MacArthur Fraction, Random Fraction, Random Assortment and Power Fraction;
