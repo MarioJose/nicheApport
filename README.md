@@ -12,15 +12,15 @@ The nicheApport package provides:
  * Fit simulated rank abundance distribution to observed rank abundance data.
 
 ### References
-Bersier, L.-F. & Sugihara, G. 1997. Species abundance patterns: the problem of testing stochastic models. \emph{J. Anim. Ecol.} 66: 769-774.
+Bersier, L.-F. & Sugihara, G. 1997. Species abundance patterns: the problem of testing stochastic models. *J. Anim. Ecol.* 66: 769-774.
 
-Cassey, P. & King, R. A. R. 2001. The problem of testing the goodness-of-fit of stochastic resource apportionment models. \emph{Environmetrics} 12: 691-698.
+Cassey, P. & King, R. A. R. 2001. The problem of testing the goodness-of-fit of stochastic resource apportionment models. *Environmetrics* 12: 691-698.
 
-Mouillot, D. et al. 2003. How parasites divide resources: a test of the niche apportionment hypothesis. \emph{J. Anim. Ecol.} 72: 757-764.
+Mouillot, D. et al. 2003. How parasites divide resources: a test of the niche apportionment hypothesis. *J. Anim. Ecol.* 72: 757-764.
 
-Tokeshi, M. 1990. Niche apportionment or random assortment: species abundance patterns revisited. \emph{J. Anim. Ecol.} 59: 1129-1146.
+Tokeshi, M. 1990. Niche apportionment or random assortment: species abundance patterns revisited. *J. Anim. Ecol.* 59: 1129-1146.
 
-Tokeshi, M. 1996. Power fraction: a new explanation of relative abundance patterns in species-rich assemblages. \emph{Oikos} 75: 543-550.
+Tokeshi, M. 1996. Power fraction: a new explanation of relative abundance patterns in species-rich assemblages. *Oikos* 75: 543-550.
 
 ### Installation
 
