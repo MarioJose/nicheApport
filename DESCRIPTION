@@ -10,4 +10,4 @@ Depends: parallel
 NeedsCompilation: no
 Version: 1.0
 Date: 2014-10-20
-URL: https://github.com/mariojose/nicheApport
+URL: http://mariojose.github.io/nicheApport/, https://github.com/mariojose/nicheApport
