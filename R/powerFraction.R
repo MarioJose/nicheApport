@@ -1,11 +1,10 @@
 # Power Fraction
-powerFraction <- function (N, S, w = 0.2, count = FALSE){
-  k <- runif(n = S, min = 0, max = 1)
-  r <- N
-  for(i in 2:S){
-    j <- sample(x = 1:(i - 1), size = 1, prob = ((r ^ w) / sum(r ^ w)))
-    r[i] <- ifelse(count, floor(r[j] * k[i]), r[j] * k[i])
-    r[j] <- abs(r[j] - r[i])
+powerFraction <- function(N, S, k = 0.2, count = FALSE){
+  for(i in 1:(S-1)){
+    target <- sample(1:length(N), size=1, prob = N^k)
+    a <- runif(1, 0, N[target])
+    a <- ifelse(count, floor(a), a)
+    N <- c(N[-target], a, N[target] - a)
   }
-  return(sort(r, decreasing = TRUE))
+  return(sort(N, decreasing=TRUE))
 }
