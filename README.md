@@ -28,3 +28,10 @@ Tokeshi, M. 1996. Power fraction: a new explanation of relative abundance patter
 library(devtools)
 install_github("mariojose/nicheApport", "master")
 ```
+
+#### Development version
+This version have the last updates waiting to release.
+```r
+library(devtools)
+install_github("mariojose/nicheApport", "dev")
+```
