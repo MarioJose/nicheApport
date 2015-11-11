@@ -15,8 +15,8 @@
   \tabular{ll}{
     Package: \tab nicheApport\cr
     Type: \tab Package\cr
-    Version: \tab 1.0\cr
-    Date: \tab 2014-07-17\cr
+    Version: \tab 1.0.1\cr
+    Date: \tab 2015-11-11\cr
     License: \tab GPL-3\cr
   }
   

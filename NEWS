@@ -1,0 +1,6 @@
+1.0.1 (2015-11-11)
+* Fixed error in call Dominance Preemption model in fitmodel and fitmodelCl
+* Improve speed on Power Fraction model
+
+1.0.0 (2014-10-24)
+* Initial release on GitHub

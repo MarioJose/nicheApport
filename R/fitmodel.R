@@ -1,7 +1,7 @@
 fitmodel <- function(x, model, count, nRand = 999, ...){
-  if(!(model %in%  c("dominanceDecay", "dominancePreep", "MacArthurFraction", 
+  if(!(model %in%  c("dominanceDecay", "dominancePreemp", "MacArthurFraction", 
                      "powerFraction", "randAssort", "randFraction"))){
-    stop(paste("\n'model' must be one of this:", '"dominanceDecay", "dominancePreep", "MacArthurFraction", "powerFraction", "randAssort", "randFraction"'))
+    stop(paste("\n'model' must be one of this:", '"dominanceDecay", "dominancePreemp", "MacArthurFraction", "powerFraction", "randAssort", "randFraction"'))
   }
   
   if(!is.matrix(x) & !is.data.frame(x)){
