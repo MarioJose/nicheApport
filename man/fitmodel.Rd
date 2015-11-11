@@ -16,7 +16,7 @@
 
 \arguments{
   \item{x}{Data frame or matrix with total species rank (from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
-  \item{model}{String containing one of follow values: "dominanceDecay", "dominancePreep", "MacArthurFraction", "powerFraction", "randAssort", "randFraction".}
+  \item{model}{String containing one of follow values: "dominanceDecay", "dominancePreemp", "MacArthurFraction", "powerFraction", "randAssort", "randFraction".}
   \item{count}{Specify if measure of abundance is number of individuals. See 'Details' for more information.}
   \item{nRand}{Number of simulations.}
   \item{nCores}{Number indicating number of processor cores or threads to be used for simulation. See 'Details' for more information.}
