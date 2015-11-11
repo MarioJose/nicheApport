@@ -35,10 +35,3 @@ This version have the last updates waiting to release.
 library(devtools)
 install_github(repo = "mariojose/nicheApport", ref = "dev")
 ```
-
-#### Development version
-This version have the last updates waiting to release.
-```r
-library(devtools)
-install_github("mariojose/nicheApport", "dev")
-```
