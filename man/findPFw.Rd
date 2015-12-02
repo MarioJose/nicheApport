@@ -28,7 +28,7 @@
   
   The fit use the protocol proposed by Cassey & King (2001) and ranked relative abundance recommendations by Mouillot et al. (2003), with some modifications. For more information of procedures consult documentation of \code{\link{fitmodel}} or \code{\link{fitmodelCl}}.
   
-  For more details see Bersier & Sugihara (1997), Cassey & King (2001) and Mouillot et al. (2003). Observed abundance fit to the model if p-value to means and variances are significant at predetermined significance level.
+  For more details see Bersier & Sugihara (1997), Cassey & King (2001) and Mouillot et al. (2003). Observed abundance fit to the model if p-value to means and variances are not significant at predetermined significance level. The observed T value (TMobs or TVobs, see 'Value' bellow) measure how well model fits to data; better fit had smaller value (Bersier & Sugihara 1997).
   
   If \code{cl} is \code{TRUE} the function fit model to data calling \code{fitmodelCl} for parallel computation to divide the number of simulations among the processor cores or threads that run the procedures simultaneously. If \code{cl} is \code{FALSE} the function call \code{fitmodel} to fit model to data. When \code{nCores = 1} the function detect number of cores or threads automatically. If you inform incorrectly the number of cores or threads, the function will inform you to correct information or will recommend to use \code{fitmodel}. The overall process using parallel computation can be twice as fast, depending on the number of processor cores or threads used.
 }
