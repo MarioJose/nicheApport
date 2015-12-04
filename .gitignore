@@ -7,5 +7,7 @@
 # R data files from past sessions
 .Rdata
 
-# RStudio files
+# RStudio project files
 .Rproj.user/
+*.Rproj
+*.Rbuildignore
