@@ -1,3 +1,7 @@
+1.0.2 (2015-12-04)
+* fitmodel and fitmodelCl now return simulation range
+* Update interpretation of p-value in help files
+
 1.0.1 (2015-11-11)
 * Fixed error in call Dominance Preemption model in fitmodel and fitmodelCl
 * Improve speed on Power Fraction model

@@ -8,6 +8,6 @@ License: GPL-2
 Encoding: UTF-8
 Depends: parallel
 NeedsCompilation: no
-Version: 1.0.1
-Date: 2015-11-11
+Version: 1.0.2
+Date: 2015-12-04
 URL: http://mariojose.github.io/nicheApport/, https://github.com/mariojose/nicheApport
