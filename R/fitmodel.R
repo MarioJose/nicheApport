@@ -81,7 +81,13 @@ fitmodel <- function(x, model, count, nRand = 999, ...){
   pvalueM <- sum(dTM > TM0) / (nRand + 1)
   pvalueV <- sum(dTV > TV0) / (nRand + 1)
   
-  return(list(dTmean = dTM, dTvar = dTV, TMobs = TM0, TVobs = TV0,
+  # Simulation range for mean and variance.
+  rM <- apply(M, MARGIN = 2, FUN = range)
+  rV <- apply(V, MARGIN = 2, FUN = range)
+  dimnames(rM) <- list(c("min", "max"), paste("rank", 1:S, sep = ""))
+  rownames(rV) <- list(c("min", "max"), paste("rank", 1:S, sep = ""))
+  
+  return(list(dTmean = dTM, dTvar = dTV, TMobs = TM0, TVobs = TV0, rangeM = rM, rangeV = rV,
               simulations = matrix(c(apply(M, 2, mean), apply(V, 2, mean)), nrow = 2, ncol = S, byrow = TRUE,
                                    dimnames = list(c("mean", "variance"), paste("rank", 1:S, sep = ""))),
               stat = matrix(c(pvalueM, pvalueV), nrow = 2, ncol = 1, 
