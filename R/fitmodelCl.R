@@ -16,6 +16,9 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
     stop("\n'count' must be specified")
   }
   
+  # Arguments in dots
+  dots <- list(...)
+  
   # Detect numbers of cores and make a cluster
   nc <- detectCores()
   if(nc < 2) {
@@ -41,27 +44,28 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   n <- dim(x)[1]
   S <- dim(x)[2]
   # Total abundance of each replicates.
-  N <- apply(x, MARGIN = 1, FUN = sum)
+  N <- apply(x, 1, sum)
   
   # Function to run in each cores
   fn <- function(rand, n, N, S, model, count, ...){
+    dots <- list(...)
     clM <- matrix(nrow = rand, ncol = S)
     clV <- matrix(nrow = rand, ncol = S)
     for(i in 1:rand){
       sim <- matrix(nrow = n, ncol = S)
       for(j in 1:n){
-        sim[j, ] <- model(N = N[j], S = S, count = count, ...)
+        sim[j, ] <- do.call(model, c(list(N = N[j], S = S, count = count), dots))
         # Transform to relative abundance
         sim[j, ] <- sim[j, ] / sum(sim[j, ])
       }
-      clM[i, ] = apply(sim, MARGIN = 2, FUN = mean)
-      clV[i, ] = apply(sim, MARGIN = 2, FUN = var)
+      clM[i, ] = apply(sim, 2, mean)
+      clV[i, ] = apply(sim, 2, var)
     }
     return(list(M = clM, V = clV))
   }
   
   # Send function to cluster
-  tmp <- clusterApplyLB(cl, randc, fn, n = n, N = N, S = S, model = getFunction(model), count = count, ...)
+  tmp <- do.call(clusterApplyLB, c(list(cl = cl, x = randc, fun = fn, n = n, N = N, S = S, model = getFunction(model), count = count), dots))
 
   # 'nRand' means and variances of 'n' simulations to the model.
   M <- matrix(ncol = S)
@@ -84,8 +88,8 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   }
   
   # Observed relative abundance mean and variance of replicates.
-  M0 <- apply(x, MARGIN = 2, FUN = mean)
-  V0 <- apply(x, MARGIN = 2, FUN = var)
+  M0 <- apply(x, 2, mean)
+  V0 <- apply(x, 2, var)
   
   # Probability that the observed mean and variance are predicted by the model.
   pM0 <- c()
@@ -147,17 +151,25 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   pvalueV <- sum(dTV > TV0) / (nRand + 1)
   
   # Simulation range for mean and variance.
-  rM <- apply(M, MARGIN = 2, FUN = range)
-  rV <- apply(V, MARGIN = 2, FUN = range)
-  dimnames(rM) <- list(c("min", "max"), paste("rank", 1:S, sep = ""))
-  rownames(rV) <- list(c("min", "max"), paste("rank", 1:S, sep = ""))
+  rM <- matrix(c(apply(M, 2, min), apply(M, 2, max)), nrow = 2, ncol = S, byrow = TRUE,
+               dimnames = list(c("min", "max"), paste("rank", 1:S, sep = "")))
+  rV <- matrix(c(apply(V, 2, min), apply(V, 2, max)), nrow = 2, ncol = S, byrow = TRUE,
+               dimnames = list(c("min", "max"), paste("rank", 1:S, sep = "")))
   
   # Stop Cluster
   stopCluster(cl)
   
-  return(list(dTmean = dTM, dTvar = dTV, TMobs = TM0, TVobs = TV0, rangeM = rM, rangeV = rV,
-              simulations = matrix(c(apply(M, 2, mean), apply(V, 2, mean)), nrow = 2, ncol = S, byrow = TRUE,
-                                   dimnames = list(c("mean", "variance"), paste("rank", 1:S, sep = ""))),
-              stat = matrix(c(pvalueM, pvalueV), nrow = 2, ncol = 1, 
-                          dimnames = list(c("mean", "variance"), "p-value"))))
+  return(new("fittedmodel",
+             Tstats = list(dTmean = dTM, dTvar = dTV, TMobs = TM0, TVobs = TV0,
+                           pvalue = matrix(c(pvalueM, pvalueV), nrow = 2, ncol = 1,
+                                           dimnames = list(c("mean", "variance"),
+                                                           "p-value"))),
+             sim.stats = matrix(c(apply(M, 2, mean), apply(V, 2, mean)), nrow = 2,
+                                ncol = S, byrow = TRUE,
+                                dimnames = list(c("mean", "variance"),
+                                                paste("rank", 1:S, sep = ""))),
+             sim.range = list(mean = rM, variance = rV),
+             obs.stats = matrix(c(M0, V0), nrow = 2, ncol = S, byrow = TRUE,
+                                dimnames = list(c("mean", "variance"),
+                                                paste("rank", 1:S, sep = "")))))
 }

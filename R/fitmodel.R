@@ -16,6 +16,9 @@ fitmodel <- function(x, model, count, nRand = 999, ...){
     stop("\n'count' must be specified")
   }
   
+  # Arguments in dots
+  dots <- list(...)
+  
   # Number of replicates and total species.
   n <- dim(x)[1]
   S <- dim(x)[2]
@@ -28,12 +31,12 @@ fitmodel <- function(x, model, count, nRand = 999, ...){
   for(i in 1:nRand){
     sim <- matrix(nrow = n, ncol = S)
     for(j in 1:n){
-      sim[j, ] <- do.call(model, list(N = N[j], S = S, count = count, ... = ...))
+      sim[j, ] <- do.call(model, c(list(N = N[j], S = S, count = count), dots))
       # Transform to relative abundance
       sim[j, ] <- sim[j, ] / sum(sim[j, ])
     }
-    M[i, ] <- apply(sim, MARGIN = 2, FUN = mean)
-    V[i, ] <- apply(sim, MARGIN = 2, FUN = var)
+    M[i, ] <- apply(sim, 2, mean)
+    V[i, ] <- apply(sim, 2, var)
   }
   
   # Transform each replicate to relative abundance.
@@ -42,8 +45,8 @@ fitmodel <- function(x, model, count, nRand = 999, ...){
   }
   
   # Observed relative abundance mean and variance of replicates.
-  M0 <- apply(x, MARGIN = 2, FUN = mean)
-  V0 <- apply(x, MARGIN = 2, FUN = var)
+  M0 <- apply(x, 2, mean)
+  V0 <- apply(x, 2, var)
   
   # Probability that the observed mean and variance are predicted by the model.
   pM0 <- c()
@@ -82,14 +85,22 @@ fitmodel <- function(x, model, count, nRand = 999, ...){
   pvalueV <- sum(dTV > TV0) / (nRand + 1)
   
   # Simulation range for mean and variance.
-  rM <- apply(M, MARGIN = 2, FUN = range)
-  rV <- apply(V, MARGIN = 2, FUN = range)
-  dimnames(rM) <- list(c("min", "max"), paste("rank", 1:S, sep = ""))
-  rownames(rV) <- list(c("min", "max"), paste("rank", 1:S, sep = ""))
+  rM <- matrix(c(apply(M, 2, min), apply(M, 2, max)), nrow = 2, ncol = S, byrow = TRUE,
+               dimnames = list(c("min", "max"), paste("rank", 1:S, sep = "")))
+  rV <- matrix(c(apply(V, 2, min), apply(V, 2, max)), nrow = 2, ncol = S, byrow = TRUE,
+               dimnames = list(c("min", "max"), paste("rank", 1:S, sep = "")))
   
-  return(list(dTmean = dTM, dTvar = dTV, TMobs = TM0, TVobs = TV0, rangeM = rM, rangeV = rV,
-              simulations = matrix(c(apply(M, 2, mean), apply(V, 2, mean)), nrow = 2, ncol = S, byrow = TRUE,
-                                   dimnames = list(c("mean", "variance"), paste("rank", 1:S, sep = ""))),
-              stat = matrix(c(pvalueM, pvalueV), nrow = 2, ncol = 1, 
-                          dimnames = list(c("mean", "variance"), "p-value"))))
+  return(new("fittedmodel",
+             Tstats = list(dTmean = dTM, dTvar = dTV, TMobs = TM0, TVobs = TV0,
+                           pvalue = matrix(c(pvalueM, pvalueV), nrow = 2, ncol = 1,
+                                           dimnames = list(c("mean", "variance"),
+                                                           "p-value"))),
+             sim.stats = matrix(c(apply(M, 2, mean), apply(V, 2, mean)), nrow = 2,
+                                ncol = S, byrow = TRUE,
+                                dimnames = list(c("mean", "variance"),
+                                                paste("rank", 1:S, sep = ""))),
+             sim.range = list(mean = rM, variance = rV),
+             obs.stats = matrix(c(M0, V0), nrow = 2, ncol = S, byrow = TRUE,
+                                dimnames = list(c("mean", "variance"),
+                                                paste("rank", 1:S, sep = "")))))
 }
