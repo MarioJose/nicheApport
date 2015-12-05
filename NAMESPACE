@@ -3,3 +3,9 @@ export(dominanceDecay, dominancePreemp, MacArthurFraction, powerFraction, randAs
 
 # Export fitting function
 export(fitmodel, fitmodelCl, findPFw)
+
+# Export Classes
+exportClasses(fittedmodel)
+
+# Export methods
+exportMethods(plot, lines, qqplot, summary, show)
