@@ -3,10 +3,10 @@
 \alias{fitmodel}
 \alias{fitmodelCl}
 
-\title{Fit species rank abundance distribution to data}
+\title{Fitting of species rank abundance distribution to data}
 
 \description{
-  Fit niche apportionment models proposed by Tokeshi (1990, 1996) using procedures proposed by Bersier & Sugihara (1997) and modified by Cassey & King (2001) and Mouillot et al. (2003). The protocol use relative abundance to fit simulated species rank abundance of particular model to observed rank abundance using Monte Carlo approach. The \code{fitmodelCl} function use parallel computation for run simulations.
+  Fits niche apportionment models, proposed by Tokeshi (1990, 1996), using procedures proposed by Bersier & Sugihara (1997) and modified by Cassey & King (2001) and Mouillot et al. (2003). The protocol use relative abundance to fit simulated species rank abundance of particular model to observed rank abundance using Monte Carlo approach. The \code{fitmodelCl} function use parallel computation for run simulations.
 }
 
 \usage{
@@ -15,7 +15,7 @@
 }
 
 \arguments{
-  \item{x}{Data frame or matrix with total species rank (from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
+  \item{x}{Data frame or matrix with species ranks (ordered from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
   \item{model}{String containing one of follow values: "dominanceDecay", "dominancePreemp", "MacArthurFraction", "powerFraction", "randAssort", "randFraction".}
   \item{count}{Specify if measure of abundance is number of individuals. See 'Details' for more information.}
   \item{nRand}{Number of simulations.}
@@ -31,10 +31,10 @@
   
   The fit use the protocol proposed by Cassey & King (2001) and ranked relative abundance recommendations by Mouillot et al. (2003), with some modifications, as the follow:
   \enumerate{
-    \item{Run ranked relative abundance of specified model of each replicates with total abundance of replicates and total ranks (\code{S}) of all replicates (\code{n}). Calculate mean (\code{M}) and variance (\code{V}) of each rank. This procedures is repeated \code{nRand} times and result in \code{nRand} \code{M} and \code{V}.}
-    \item{Transform abundance of each replicates in relative abundance, maintaining the rank.}
+    \item{Run ranked observed abundance of specified model of each replicates, retaining the total abundance and number of ranks present in each replicate. Transform simulated abundance to relative abundance and calculate mean (\code{M}) and variance (\code{V}) of each rank for all replicates \code{n}. This procedures is repeated \code{nRand} times and result in \code{nRand} \code{M} and \code{V} for all \code{S} ranks.}
+    \item{Transform observed abundance of each replicates in relative abundance, retaining the rank.}
     \item{Calculate mean (\code{M0}) and variance (\code{V0}) of each rank for observed replicates.}
-    \item{Calculate the estimated p-value for mean of each rank \code{M0[S]} is in \code{nRand} simulated rank \code{M[S]}:
+    \item{Calculate the estimated p-value for mean of each rank \code{M0[S]} in \code{nRand} simulated rank \code{M[S]}:
     
     \code{p(M)[S] = 2 * min((bl + 1) / (nRand + 1), (bs + 1) / (nRand + 1))},
     
@@ -43,26 +43,20 @@
     
     \code{T0(M0) = - 2 sum(log(p[S](M)))} and \code{T0(V0) = - 2 sum(log(p[S](V)))}.}
     
-    \item{Calculate the distribution of \code{T} of each rank as follow: for each \code{M[S]} of all \code{nRand} means simulations calculate \code{T(M)} using steps 4-5. This procedures is the same to variances \code{T(V)}.}
+    \item{Calculate the distribution of \emph{T} of each rank as follow: for each \code{M[S]} of all \code{nRand} means simulations calculate \code{T(M)} using steps 4-5. This procedures is the same to variances \code{T(V)}.}
     \item{Calculate the final estimated p-value to fit data for model as follow:
     
     \code{p-value = t / (nRand + 1)},
     
     where \code{t} is the number of \code{T(M)} values greater than \code{T0(M0)}. The same for variance.}
   }
-  For more details see Bersier & Sugihara (1997), Cassey & King (2001) and Mouillot et al. (2003). Model fit to the observed abundance if p-value to means and variances are not significant at predetermined significance level. The observed T value (TMobs or TVobs, see 'Value' bellow) measure how well model fits to data; better fit had smaller value (Bersier & Sugihara 1997).
+  For more details see Bersier & Sugihara (1997), Cassey & King (2001) and Mouillot et al. (2003). Model fits to the observed abundance if p-value to means and variances are not significant at predetermined significance level (probability of found observed \emph{T} at simulated \emph{T}). The observed \emph{T} value (\code{TMobs} or \code{TVobs}, see 'Value' bellow) measure how well model fits to data; better fit had smaller value (Bersier & Sugihara 1997).
   
-  \code{fitmodelCl} use parallel computation to divide the number of simulations among the processor cores or threads that run the procedures simultaneously. When \code{nCores = 1} the function detect number of cores or threads automatically. If you inform incorrectly the number of cores or threads, the function will inform you to correct information or will recommend to use \code{fitmodel}. The overall process using parallel computation can be twice as fast, depending on the number of processor cores or threads used.
+  \code{fitmodelCl} use parallel computation to divide the number of simulations among the processor cores or threads and run the procedures simultaneously. When \code{nCores = 1} the function detect number of cores or threads automatically. If you inform incorrectly the number of cores or threads, the function will inform you to correct information or will recommend to use \code{fitmodel}. The overall process using parallel computation can be twice as fast, depending on the number of processor cores or threads used.
 }
 
 \value{
-  List containing:
-  \item{dTmean}{Distribution of \emph{T} values for mean.}
-  \item{dTvar}{Distribution of \emph{T} values for variance.}
-  \item{TMobs}{Observed value of \emph{T} for mean.}
-  \item{TVobs}{Observed value of \emph{T} for variance.}
-  \item{simulations}{Matrix containing mean and variance of simulations to each rank.}
-  \item{stat}{Matrix containing p-value for mean and variance.}
+  An object of class \code{fitmodel}.
 }
 
 \references{
@@ -87,11 +81,14 @@
   For models see \code{\link{dominanceDecay}}, \code{\link{dominancePreemp}}, \code{\link{MacArthurFraction}}, \code{\link{randFraction}}, \code{\link{randAssort}} and \code{\link{powerFraction}}.
   
   For fit models see \code{\link{fitmodel}}. To find best \code{w} parameter to \code{\link{powerFraction}} see \code{\link{findPFw}}.
+  
+  For class \code{fitmodel} see \link{fitmodel-class}.
 }
 \examples{
   data <- matrix(nrow = 10, ncol = 40)
   for(i in 1:length(data[ ,1])){
     data[i, ] <- randFraction(N = 100, S = 40, count = FALSE)
   }
-  fitmodelCl(x = data, model = "randFraction", count = FALSE, nRand = 99, nCores = 2)
+  m1 <- fitmodelCl(x = data, model = "randFraction", count = FALSE, nRand = 99, nCores = 2)
+  m1
 }
