@@ -1,4 +1,4 @@
-setMethod(f = "plot", signature = "fittedmodel", 
+setMethod(f = "plot", signature = "fitmodel", 
           definition = function(x, stat = "mean", base = NULL, ...){
             dots <- list(...)
             if(!stat %in% c("mean", "variance")) 
@@ -10,21 +10,32 @@ setMethod(f = "plot", signature = "fittedmodel",
               else dots$ylab <- substitute(expression(log[b]("Relative abundance")), 
                                            list(b = base))
             }
+
+            dots$yaxt <- "n"
             dots$xaxt <- "n"
             
             if(!is.null(base)){
-              do.call(plot, c(list(x = log(x@obs.stats[stat, ], base), bty = "n", 
-                                   yaxt = "n"), dots))
-              axis(side = 2, axTicks(2), 
-                   labels = parse(text=sprintf(paste(base, "^%d", sep = ""), 
-                                               axTicks(2))), las=2)
+              obs.stats <- log(x@obs.stats[stat, ], base)
+              yTicks <- axisTicks(range(obs.stats), log = FALSE, nint = 7)
             }
-            else do.call(plot, c(list(x = x@obs.stats[stat, ], bty = "n"), dots))
+            else{
+              obs.stats <- x@obs.stats[stat, ]
+              yTicks <- axisTicks(c(0, max(obs.stats)), log = FALSE, nint = 7)
+            }
+    
+            xTicks <- axisTicks(c(1, length(obs.stats)), log = FALSE, nint = 7)
             
-            axis(1, c(1, axisTicks(c(1, dim(x@obs.stats)[2]), log = FALSE, nint = 5)))
+            do.call(plot, c(list(x = obs.stats, bty = "n"), dots))
+            
+            axis(1, c(1, xTicks))
+            if(!is.null(base)){
+              axis(side = 2, at = yTicks, las = 2, 
+                   labels = parse(text=sprintf(paste(base, "^%d", sep = ""), yTicks)))
+            }
+            else axis(2, at = yTicks, las = 2)
           })
 
-setMethod(f = "lines", signature = "fittedmodel", 
+setMethod(f = "lines", signature = "fitmodel", 
           definition = function(x, stat = "mean", base = NULL, range = FALSE, ...){
             dots <- list(...)
             if(!stat %in% c("mean", "variance")) 
@@ -48,8 +59,8 @@ setMethod(f = "lines", signature = "fittedmodel",
             }
           })
 
-setMethod(f = "qqplot", signature = "fittedmodel", 
-          definition = function(x, stat = "mean", base = NULL, ...){
+setMethod(f = "qqplot", signature = "fitmodel", 
+          definition = function(x, stat = "mean", base = NULL, range = FALSE, ...){
             dots <- list(...)
             if(!stat %in% c("mean", "variance")) 
               stop("'stat' parameter must be 'mean' or 'variance'")
@@ -83,8 +94,10 @@ setMethod(f = "qqplot", signature = "fittedmodel",
             
             do.call(plot, c(list(x = sim.stats, y = sim.stats, type = "l"), dots))
             
-            lines(sim.stats, sim.range["min", ], lty = 2)
-            lines(sim.stats, sim.range["max", ], lty = 2)
+            if(range){
+              lines(sim.stats, sim.range["min", ], lty = 2)
+              lines(sim.stats, sim.range["max", ], lty = 2)
+            }
             
             rank.fit <- rep(0, length(obs.stats))
             rank.fit[obs.stats >= sim.range["min", ] & obs.stats <= sim.range["max", ]] <- 1
@@ -92,12 +105,25 @@ setMethod(f = "qqplot", signature = "fittedmodel",
             points(sim.stats[rank.fit == 1], obs.stats[rank.fit == 1])            
           })
 
-setMethod(f = "summary", signature = "fittedmodel", 
-          definition = function(object, ...){
-            
-          })
-
-setMethod(f = "show", signature = "fittedmodel", 
+setMethod(f = "show", signature = "fitmodel", 
           definition = function(object){
+            cat("Niche Apportionment fitting\n")
+            cat("Data type:", ifelse(object@call$count, "discrete", "continuous"), "\n")
+            cat("Model:", object@call$model, "\n")
+            cat("\t\tNumber of randomization:", object@call$nRand, "\n")
+            cat("\t\tNumber of ranks:", object@call$nRank, "\n")
+            cat("\t\tNumber of replicates:", object@call$nRepl, "\n\n")
             
+            cat("Fitting for mean\n")
+            print(base::summary(object@Tstats$dTmean))
+            
+            cat("Observed T:", object@Tstats$TMobs, "\n")
+            cat("P-value for Tobs greater than simulated:", 
+                object@Tstats$pvalue[1, ], "\n\n")
+            
+            cat("Fitting for variance\n")
+            print(base::summary(object@Tstats$dTvar))
+            cat("Observed T:", object@Tstats$TVobs, "\n")
+            cat("P-value for Tobs greater than simulated:", 
+                object@Tstats$pvalue[2, ], "\n")
           })
