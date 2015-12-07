@@ -142,14 +142,13 @@ setMethod(f = "show", signature = "fitmodel",
             
             cat("Fitting for mean\n")
             print(base::summary(object@Tstats$dTmean))
-            
-            cat("Observed T:", object@Tstats$TMobs, "\n")
+            cat("Observed T:", round(object@Tstats$TMobs, 2), "\n")
             cat("P-value for Tobs greater than simulated:", 
-                object@Tstats$pvalue[1, ], "\n\n")
+                round(object@Tstats$pvalue[1, ], 4), "\n\n")
             
             cat("Fitting for variance\n")
             print(base::summary(object@Tstats$dTvar))
-            cat("Observed T:", object@Tstats$TVobs, "\n")
+            cat("Observed T:", round(object@Tstats$TVobs, 2), "\n")
             cat("P-value for Tobs greater than simulated:", 
-                object@Tstats$pvalue[2, ], "\n")
+                round(object@Tstats$pvalue[2, ], 4), "\n")
           })
