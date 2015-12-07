@@ -9,3 +9,12 @@ exportClasses(fitmodel)
 
 # Export methods
 exportMethods(plot, lines, qqplot, hist, show)
+
+# Import function from packages
+importFrom("graphics", plot, lines, hist)
+
+# Import packages
+import(
+    parallel,
+    methods
+)

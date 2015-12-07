@@ -6,7 +6,8 @@ Maintainer: Mario J. Marques-Azevedo <mariojmaaz@gmail.com>
 Description: Simulate and fit, using Monte Carlo approach, rank abundance distribution to niche apportionment species abundance distributions models.
 License: GPL-2
 Encoding: UTF-8
-Depends: parallel
+Depends: parallel, methods
+Imports: graphics
 NeedsCompilation: no
 Version: 1.1.0
 Date: 2015-12-07
