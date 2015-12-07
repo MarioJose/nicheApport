@@ -3,6 +3,7 @@
 \docType{class}
 
 \alias{fitmodel-class}
+\alias{hist,fitmodel-method}
 \alias{lines,fitmodel-method}
 \alias{plot,fitmodel-method}
 \alias{qqplot,fitmodel-method}
