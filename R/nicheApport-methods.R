@@ -105,6 +105,32 @@ setMethod(f = "qqplot", signature = "fitmodel",
             points(sim.stats[rank.fit == 1], obs.stats[rank.fit == 1])            
           })
 
+setMethod(f = "hist", signature = "fitmodel", 
+          definition = function(x, stat = "mean", arrow.col = "blue", ...){
+            dots <- list(...)
+            if(!stat %in% c("mean", "variance")) 
+              stop("'stat' parameter must be 'mean' or 'variance'")
+            
+            if(!"xlab" %in% names(dots)) dots$xlab <- "T values"
+            if(!"main" %in% names(dots)) dots$main <- ""
+            
+            if(stat == "mean"){
+              sta <- x@Tstats$dTmean
+              obs <- x@Tstats$TMobs
+            }
+            else {
+              sta <- x@Tstats$dTvar
+              obs <- x@Tstats$TVobs
+            }
+            
+            hs <- do.call(hist, c(list(x = sta, xlim = c(0, max(sta, obs * 1.3))), dots))
+            arrows(x0 = obs, x1 = obs, y0 = max(hs$counts) * 0.75, lwd = 2, 
+                   y1 = min(hs$counts) * 1.1, length = 0.1, lty = 1.3, col = arrow.col)
+            legend("topright", cex = 0.9, bty = "n",
+                   legend = paste("TMobs =", round(obs, 2), "\npvalue =", 
+                                  round(x@Tstats$pvalue[stat, ], 2)))
+})
+
 setMethod(f = "show", signature = "fitmodel", 
           definition = function(object){
             cat("Niche Apportionment fitting\n")

@@ -8,4 +8,4 @@ export(fitmodel, fitmodelCl, findPFw)
 exportClasses(fitmodel)
 
 # Export methods
-exportMethods(plot, lines, qqplot, show)
+exportMethods(plot, lines, qqplot, hist, show)
