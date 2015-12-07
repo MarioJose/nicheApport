@@ -34,29 +34,31 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   }
   cl <- makeCluster(nc)
   
-  # It partitions randomizations between cores
+  # Partition randomizations between cores
   randc <- rep(floor(nRand / nc), nc)
   if(sum(randc < nRand)){
     randc[1:(nRand - sum(randc))] <- randc[1:(nRand - sum(randc))] + 1
   }
   
-  # Number of replicates and total species
+  # Number of replicates and ranks.
   n <- dim(x)[1]
-  S <- dim(x)[2]
-  # Total abundance of each replicates.
+  Rk <- dim(x)[2]
+  
+  # Total abundance and species of each replicates.
   N <- apply(x, 1, sum)
+  S <- apply(x > 0, 1, sum)
   
   # Function to run in each cores
-  fn <- function(rand, n, N, S, model, count, ...){
+  fn <- function(rand, n, N, S, Rk, model, count, ...){
     dots <- list(...)
-    clM <- matrix(nrow = rand, ncol = S)
-    clV <- matrix(nrow = rand, ncol = S)
+    clM <- matrix(nrow = rand, ncol = Rk)
+    clV <- matrix(nrow = rand, ncol = Rk)
     for(i in 1:rand){
-      sim <- matrix(nrow = n, ncol = S)
+      sim <- matrix(0, nrow = n, ncol = Rk)
       for(j in 1:n){
-        sim[j, ] <- do.call(model, c(list(N = N[j], S = S, count = count), dots))
+        sim[j,1:S[j]] <- do.call(model, c(list(N = N[j], S = S[j], count = count), dots))
         # Transform to relative abundance
-        sim[j, ] <- sim[j, ] / sum(sim[j, ])
+        sim[j,1:S[j]] <- sim[j, ] / sum(sim[j, ])
       }
       clM[i, ] = apply(sim, 2, mean)
       clV[i, ] = apply(sim, 2, var)
@@ -65,11 +67,11 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   }
   
   # Send function to cluster
-  tmp <- do.call(clusterApplyLB, c(list(cl = cl, x = randc, fun = fn, n = n, N = N, S = S, model = getFunction(model), count = count), dots))
+  tmp <- do.call(clusterApplyLB, c(list(cl = cl, x = randc, fun = fn, n = n, N = N, S = S, Rk = Rk, model = getFunction(model), count = count), dots))
 
   # 'nRand' means and variances of 'n' simulations to the model.
-  M <- matrix(ncol = S)
-  V <- matrix(ncol = S)
+  M <- matrix(ncol = Rk)
+  V <- matrix(ncol = Rk)
   
   # Create data frame with result of cluster
   M <- tmp[[1]]$M
@@ -94,7 +96,7 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   # Probability that the observed mean and variance are predicted by the model.
   pM0 <- c()
   pV0 <- c()
-  for(i in 1:S){
+  for(i in 1:Rk){
     # p = (b+1)/(m+1)
     pM0[i] <- 2 * min((sum(M[ ,i] < M0[i]) + 1) / (nRand + 1),
                       (sum(M[ ,i] > M0[i]) + 1) / (nRand + 1))
@@ -107,7 +109,7 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   TV0 <- -2 * sum(log(pV0))
   
   # Function to run in cluster
-  fn <- function(core, rand, nRand, M, V, S){
+  fn <- function(core, rand, nRand, M, V, Rk){
     cldTM <- c()
     cldTV <- c()
     
@@ -120,7 +122,7 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
     for(i in range){
       clpM <- c()
       clpV <- c()
-      for(j in 1:S){
+      for(j in 1:Rk){
         # p = (b+1)/(m+1)
         clpM[j] <- 2 * min(((sum(c(M[-i,j], M0[j]) < M[i,j]) + 1) / (nRand + 1)), 
                            ((sum(c(M[-i,j], M0[j]) > M[i,j]) + 1) / (nRand + 1)))
@@ -134,7 +136,7 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   }
   
   # Send function to cluster
-  tmp <- clusterApplyLB(cl, seq(nc), fn, rand = randc, nRand = nRand, M = M, V = V, S = S)
+  tmp <- clusterApplyLB(cl, seq(nc), fn, rand = randc, nRand = nRand, M = M, V = V, Rk = Rk)
   
   # Distribution of T values.
   dTM <- c()
@@ -151,25 +153,27 @@ fitmodelCl <- function(x, model, count, nRand = 999, nCores = 2, ...){
   pvalueV <- sum(dTV > TV0) / (nRand + 1)
   
   # Simulation range for mean and variance.
-  rM <- matrix(c(apply(M, 2, min), apply(M, 2, max)), nrow = 2, ncol = S, byrow = TRUE,
-               dimnames = list(c("min", "max"), paste("rank", 1:S, sep = "")))
-  rV <- matrix(c(apply(V, 2, min), apply(V, 2, max)), nrow = 2, ncol = S, byrow = TRUE,
-               dimnames = list(c("min", "max"), paste("rank", 1:S, sep = "")))
+  rM <- matrix(c(apply(M, 2, min), apply(M, 2, max)), nrow = 2, ncol = Rk, byrow = TRUE,
+               dimnames = list(c("min", "max"), paste("rank", 1:Rk, sep = "")))
+  rV <- matrix(c(apply(V, 2, min), apply(V, 2, max)), nrow = 2, ncol = Rk, byrow = TRUE,
+               dimnames = list(c("min", "max"), paste("rank", 1:Rk, sep = "")))
   
   # Stop Cluster
   stopCluster(cl)
   
-  return(new("fittedmodel",
+  return(new("fitmodel",
+             call = list(model = model, nRepl = n, nRank = Rk, nRand = nRand, 
+                         count = count),
              Tstats = list(dTmean = dTM, dTvar = dTV, TMobs = TM0, TVobs = TV0,
                            pvalue = matrix(c(pvalueM, pvalueV), nrow = 2, ncol = 1,
                                            dimnames = list(c("mean", "variance"),
                                                            "p-value"))),
              sim.stats = matrix(c(apply(M, 2, mean), apply(V, 2, mean)), nrow = 2,
-                                ncol = S, byrow = TRUE,
+                                ncol = Rk, byrow = TRUE,
                                 dimnames = list(c("mean", "variance"),
-                                                paste("rank", 1:S, sep = ""))),
+                                                paste("rank", 1:Rk, sep = ""))),
              sim.range = list(mean = rM, variance = rV),
-             obs.stats = matrix(c(M0, V0), nrow = 2, ncol = S, byrow = TRUE,
+             obs.stats = matrix(c(M0, V0), nrow = 2, ncol = Rk, byrow = TRUE,
                                 dimnames = list(c("mean", "variance"),
-                                                paste("rank", 1:S, sep = "")))))
+                                                paste("rank", 1:Rk, sep = "")))))
 }
