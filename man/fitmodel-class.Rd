@@ -56,13 +56,20 @@
 
 \section{Methods}{
   \describe{
-    \item{lines}{\code{signature(x = "fitmodel")}: Plot line of fitted model.}
-    \item{plot}{\code{signature(x = "fitmodel")}: Plot ranked abundance.}
-    \item{qqplot}{\code{signature(x = "fitmodel")}: Quantile-Quantile plot.}
+    \item{hist}{\code{signature(x = "fitmodel")}: Plot histogram of simulated \emph{T} values. Arguments are: \code{stat} and \code{arrow.col}.}
+    \item{lines}{\code{signature(x = "fitmodel")}: Plot line of fitted model. Arguments are: \code{stat}, \code{base} and \code{range}.}
+    \item{plot}{\code{signature(x = "fitmodel")}: Plot ranked abundance. Arguments are: \code{stat} and \code{base}.}
+    \item{qqplot}{\code{signature(x = "fitmodel")}: Quantile-Quantile plot. Arguments are: \code{stat}, \code{base} and \code{range}.}
     \item{show}{\code{signature(object = "fitmodel")}: Display object.}
-    
-    The methods \code{lines}, \code{plot} and \code{qqplot} accept parameters \code{stat} and \code{base}. Further the methods \code{lines} and \code{qqplot} accept parameter \code{range}. The parameter \code{stat} inform if line must be plotted using mean (\code{"mean"}) or variance (\code{"variance"}) of model simulation. The \code{base} parameter inform the base of logarithm. If this value is different of \code{NULL}, then data are transformed to logarithm. The \code{range} parameter inform if minimum and maximum line must be plotted.
-	 }
+	}
+  
+  \subsection{Arguments}{
+  \describe{
+    \item{stat}{Inform if line must be plotted using mean (\code{"mean"}) or variance (\code{"variance"}) of model simulation.}
+    \item{base}{Inform the base of logarithm. If this value is different of \code{NULL}, then data are transformed to logarithm.}
+    \item{range}{Inform if minimum and maximum line must be plotted.}
+    \item{arrow.col}{Arrow color at histogram plot.}
+  }}
 }
 
 \author{
@@ -81,8 +88,11 @@
   plot(m1, base = 2)
   lines(m1, base = 2, range = TRUE)
   
-  # For qqplot
+  # QQplot
   qqplot(m1, base = 2, range = TRUE)
+  
+  # Histogram
+  hist(m1)
 }
 
 \keyword{classes}
