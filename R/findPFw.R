@@ -18,10 +18,10 @@ findPFw <- function(x, count, ws = 0, we = 1, f = 0.01, nRand = 99, cl = TRUE, n
     } else {
       m <- fitmodel(x, model = "powerFraction", count = count, nRand = nRand, w = out$w[i])
     }
-    out$TMobs[i] <- m$TMobs
-    out$TVobs[i] <- m$TVobs
-    out$pvalueM[i] <- m$stat[1, ]
-    out$pvalueV[i] <- m$stat[2, ]
+    out$TMobs[i] <- m@Tstats$TMobs
+    out$TVobs[i] <- m@Tstats$TVobs
+    out$pvalueM[i] <- m@Tstats$pvalue[1, ]
+    out$pvalueV[i] <- m@Tstats$pvalue[2, ]
   }
   return(out)
 }
