@@ -40,17 +40,17 @@
       }
     }
     \item{\code{sim.stats}:}{
-      Object of class \code{"matrix"} containing mean and variance of simulations to each rank.
+      Object of class \code{"matrix"} containing mean and variance of simulated relative abundance of each rank.
     }
     \item{\code{sim.range}:}{
       Object of class \code{"list"} containing:
       \describe{
-        \item{mean}{Matrix containing minimum and maximum simulation values for mean of each rank.}
-        \item{variance}{Matrix containing minimum and maximum simulation values for variance of each rank.}
+        \item{mean}{Matrix containing minimum and maximum simulatated relative abundance mean of each rank.}
+        \item{variance}{Matrix containing minimum and maximum simulated relative abundance variance of each rank.}
       }
     }
     \item{\code{obs.stats}:}{
-      Object of class \code{"matrix"} containing mean and variance of replicates observed to each rank.
+      Object of class \code{"matrix"} containing mean and variance observed relative abundance of each rank of all replicates.
     }
   }
 }
@@ -58,18 +58,23 @@
 \section{Methods}{
   \describe{
     \item{hist}{\code{signature(x = "fitmodel")}: Plot histogram of simulated \emph{T} values. Arguments are: \code{stat} and \code{arrow.col}.}
-    \item{lines}{\code{signature(x = "fitmodel")}: Plot line of fitted model. Arguments are: \code{stat}, \code{base} and \code{range}.}
+    \item{lines}{\code{signature(x = "fitmodel")}: Plot line of fitted model. Arguments are: \code{stat}, \code{base}, \code{range}, \code{range.lty} and \code{range.col}.}
     \item{plot}{\code{signature(x = "fitmodel")}: Plot ranked abundance. Arguments are: \code{stat} and \code{base}.}
-    \item{qqplot}{\code{signature(x = "fitmodel")}: Quantile-Quantile plot. Arguments are: \code{stat}, \code{base} and \code{range}.}
+    \item{qqplot}{\code{signature(x = "fitmodel")}: Quantile-Quantile plot. Arguments are: \code{stat}, \code{base}, \code{range}, \code{qqline}, \code{range.lty}, \code{range.col}, \code{in.col} and \code{out.col}.}
     \item{show}{\code{signature(object = "fitmodel")}: Display object.}
 	}
   
   \subsection{Arguments}{
   \describe{
-    \item{stat}{Inform if line must be plotted using mean (\code{"mean"}) or variance (\code{"variance"}) of model simulation.}
-    \item{base}{Inform the base of logarithm. If this value is different of \code{NULL}, then data are transformed to logarithm.}
-    \item{range}{Inform if minimum and maximum line must be plotted.}
-    \item{arrow.col}{Arrow color at histogram plot.}
+    \item{arrow.col}{Character informing the arrow color of observed \code{T} value at histogram plot.}
+    \item{base}{Numeric informing the base of logarithm. If this value is different of \code{NULL}, then data are transformed to logarithm.}
+    \item{in.col}{Character informing the color of observed fitted values (within of simulated range).}
+    \item{out.col}{Character informing the color of observed non fitted values (out of simulated range).}
+    \item{qqline}{Logical informing if qqline must be plotted.}
+    \item{range}{Logical informing if minimum and maximum line must be plotted.}
+    \item{range.col}{Character informing the color of range plot.}
+    \item{range.lty}{Numerical informing the line type of range plot.}
+    \item{stat}{Character informing if line must be plotted using mean (\code{"mean"}) or variance (\code{"variance"}) of model simulation.}
   }}
 }
 
