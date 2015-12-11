@@ -35,7 +35,7 @@ fitmodel <- function(x, model, count, nRand = 999, ...){
     for(j in 1:n){
       sim[j,1:S[j]] <- do.call(model, c(list(N = N[j], S = S[j], count = count), dots))
       # Transform to relative abundance
-      sim[j,1:S[j]] <- sim[j, ] / sum(sim[j, ])
+      sim[j,1:S[j]] <- sim[j,1:S[j]] / sum(sim[j,1:S[j]])
     }
     M[i, ] <- apply(sim, 2, mean)
     V[i, ] <- apply(sim, 2, var)
