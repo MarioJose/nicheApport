@@ -1,4 +1,5 @@
-1.1.0 (2015-12-07)
+1.1.0 (next release)
+* Add vignette 'Quick Reference for nicheApport'
 * Update documentation
 * Improve fitmode and fitmodelCl functions
 * Add methods to plot rank abundance, simulated model line, qqplot of observed and simulated data and histogram of distribution of T value
