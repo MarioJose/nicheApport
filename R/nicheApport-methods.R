@@ -28,39 +28,38 @@ setMethod(f = "plot", signature = "fitmodel",
             do.call(plot, c(list(x = obs.stats, bty = "n"), dots))
             
             axis(1, c(1, xTicks))
-            if(!is.null(base)){
-              axis(side = 2, at = yTicks, las = 2, 
-                   labels = parse(text=sprintf(paste(base, "^%d", sep = ""), yTicks)))
-            }
-            else axis(2, at = yTicks, las = 2)
+            axis(2, at = yTicks, las = 2)
           })
 
 setMethod(f = "lines", signature = "fitmodel", 
-          definition = function(x, stat = "mean", base = NULL, range = FALSE, ...){
+          definition = function(x, stat = "mean", base = NULL, range = FALSE, range.lty = 2, range.col = "black", ...){
             dots <- list(...)
             if(!stat %in% c("mean", "variance")) 
               stop("'stat' parameter must be 'mean' or 'variance'")
             
-            if("lty" %in% dots) dots <- dots[names(dots) != "lty"]
             if(!"col" %in% names(dots)) dots$col <- "blue"
+            
+            sim.sta <- x@sim.stats[stat, ]
+            sim.min <- x@sim.range[[stat]]["min", ]
+            sim.max <- x@sim.range[[stat]]["max", ]
+            
             if(!is.null(base)){
-              sim.stats <- log(x@sim.stats[stat, ], base)
-              sim.range <- log(x@sim.range[[stat]], base)
-            }
-            else{
-              sim.stats <- x@sim.stats[stat, ]
-              sim.range <- x@sim.range[[stat]]
+              sim.sta <- log(sim.sta[sim.sta > 0], base)
+              sim.min <- log(sim.min[sim.min > 0], base)
+              sim.max <- log(sim.max[sim.max > 0], base)
             }
             
-            do.call(lines, c(list(x = sim.stats), dots))
+            do.call(lines, c(list(x = sim.sta), dots))
             if(range){
-              do.call(lines, c(list(x = sim.range["min", ], lty = 2), dots))
-              do.call(lines, c(list(x = sim.range["max", ], lty = 2), dots))
+              lines(x = sim.min, lty = range.lty, col = range.col)
+              lines(x = sim.max, lty = range.lty, col = range.col)
             }
           })
 
 setMethod(f = "qqplot", signature = "fitmodel", 
-          definition = function(x, stat = "mean", base = NULL, range = FALSE, ...){
+          definition = function(x, stat = "mean", base = NULL, range = FALSE, 
+                                qqline = TRUE, range.lty = 2, range.col = "black",
+                                in.col = "black", out.col = "grey70", ...){
             dots <- list(...)
             if(!stat %in% c("mean", "variance")) 
               stop("'stat' parameter must be 'mean' or 'variance'")
@@ -75,34 +74,39 @@ setMethod(f = "qqplot", signature = "fitmodel",
               else dots$ylab <- substitute(expression(log[b]("Observed abundance")), 
                                            list(b = base))
             }
-            
-            if("lty" %in% dots) dots <- dots[names(dots) != "lty"]
+            if(!"lty" %in% names(dots)) dots$lty <- 1
+            if(!"col" %in% names(dots)) dots$col <- "black"
 
+            obs.sta <- x@obs.stats[stat, ]
+            sim.sta <- x@sim.stats[stat, ]
+            sim.min <- x@sim.range[[stat]]["min", ]
+            sim.max <- x@sim.range[[stat]]["max", ]
+                        
             if(!is.null(base)){
-              sim.stats <- log(x@sim.stats[stat, ], base)
-              sim.range <- log(x@sim.range[[stat]], base)
-              obs.stats <- log(x@obs.stats[stat, ], base)
-            }
-            else{
-              sim.stats <- x@sim.stats[stat, ]
-              sim.range <- x@sim.range[[stat]]
-              obs.stats <- x@obs.stats[stat, ]
+              obs.sta <- log(obs.sta, base)
+              sim.sta <- log(sim.sta[sim.sta > 0], base)
+              min.fil <- sim.min > 0
+              max.fil <- sim.max > 0
+              sim.min[min.fil] <- log(sim.min[min.fil], base)
+              sim.max[max.fil] <- log(sim.max[max.fil], base)
             }
             
-            dots$ylim <- c(min(c(sim.range["min", ], obs.stats)), 
-                           max(c(sim.range["max", ], obs.stats)))
+            if(range) 
+              dots$ylim <- c(min(c(sim.min, obs.sta)), max(c(sim.max, obs.sta)))
             
-            do.call(plot, c(list(x = sim.stats, y = sim.stats, type = "l"), dots))
+            do.call(plot, c(list(x = sim.sta, y = sim.sta, type = "n"), dots))
+            
+            if(qqline) lines(x = sim.sta, y = sim.sta, lty = dots$lty, col = dots$col)
             
             if(range){
-              lines(sim.stats, sim.range["min", ], lty = 2)
-              lines(sim.stats, sim.range["max", ], lty = 2)
+              lines(sim.sta[min.fil], sim.min[min.fil], lty = range.lty, col = range.col)
+              lines(sim.sta[max.fil], sim.max[max.fil], lty = range.lty, col = range.col)
             }
             
-            rank.fit <- rep(0, length(obs.stats))
-            rank.fit[obs.stats >= sim.range["min", ] & obs.stats <= sim.range["max", ]] <- 1
-            points(sim.stats[rank.fit == 0], obs.stats[rank.fit == 0], col = "#cccccc")
-            points(sim.stats[rank.fit == 1], obs.stats[rank.fit == 1])            
+            rank.fit <- vector("numeric", length(obs.sta))
+            rank.fit[obs.sta >= sim.min & obs.sta <= sim.max] <- 1
+            points(sim.sta[rank.fit == 0], obs.sta[rank.fit == 0], col = out.col)
+            points(sim.sta[rank.fit == 1], obs.sta[rank.fit == 1], col = in.col)            
           })
 
 setMethod(f = "hist", signature = "fitmodel", 
