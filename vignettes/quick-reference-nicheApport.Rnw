@@ -24,18 +24,18 @@
 
 \section{Introduction}
 
-Species abundance distribution (SAD) is a basic description of ecological communities data \citep{mcgill_species_2007}. One way to represent the distribution of species abundance is to plot the ranked abundances from larger to smaller on x-axis and the abundance on y-axis (known too as MacArthur plot). Niche apportionment models were proposed to be a biological model to describe SAD \citep{tokeshi_niche_1990,tokeshi_power_1996,matthews_fitting_2014}. This models are assume that total niche are sequentially divided between species \citep{tokeshi_niche_1990,matthews_fitting_2014}. There are proposed procedures to fit niche apportionment model to data \citep{tokeshi_niche_1990,bersier_species_1997,cassey_problem_2001,mouillot_how_2003}, but no one public tool to do this. This package simulate species rank abundance distributions (RAD) and use Monte Carlo approach, proposed by \cite{bersier_species_1997,cassey_problem_2001,mouillot_how_2003} to fit model to replicates data.
+Species abundance distribution (SAD) is one of the basic description of ecological communities data \citep{mcgill_species_2007}. One way to represent the distribution of species abundance is to plot the ranked abundances from highest to lowest on x-axis and the abundance on y-axis (known too as MacArthur plot). Niche apportionment models were proposed to be a biological model to describe SAD \citep{tokeshi_niche_1990,tokeshi_power_1996,matthews_fitting_2014}. This models assume that total niche are sequentially divided between species \citep{tokeshi_niche_1990,matthews_fitting_2014}. There are proposed procedures to fit niche apportionment model to data \citep{tokeshi_niche_1990,bersier_species_1997,cassey_problem_2001,mouillot_how_2003}, but no one public tool to do this. This package simulate species rank abundance distributions (RAD) and use Monte Carlo approach, proposed by \cite{bersier_species_1997,cassey_problem_2001,mouillot_how_2003} to fit model to replicates data.
 
 \section{Instalation}
 
-To install package you can do using \code{devtools} package and a stable \code{master} branch
+The package can be installed using \code{devtools} package on R. For a stable version use the \code{master} branch
 
 <<install-master, eval=FALSE>>=
 library(devtools)
 install_github(repo = "mariojose/nicheApport", ref = "master")
 @
 
-or a \code{dev} branch with the news updated (before increment stable branch)
+or for a development version a \code{dev} branch.
 
 <<install-dev, eval=FALSE>>=
 library(devtools)
@@ -44,9 +44,9 @@ install_github(repo = "mariojose/nicheApport", ref = "dev")
 
 \section{Models}
 
-The \code{nicheApport} package simulate the six models proposes by \cite{tokeshi_niche_1990,tokeshi_power_1996}: Dominance Decay, Dominance Preemption, MacArthur Fraction, Random Fraction, Random Assortment and Power Fraction.
+The \code{nicheApport} package simulate the six models proposed by \cite{tokeshi_niche_1990,tokeshi_power_1996}: Dominance Decay, Dominance Preemption, MacArthur Fraction, Random Fraction, Random Assortment and Power Fraction.
 
-First load package
+Before start simulation, load the package,
 
 <<load-library, message=FALSE>>=
 library(nicheApport)
@@ -59,9 +59,9 @@ set.seed(42)
 randFraction(N = 150, S = 10, count = TRUE)
 @
 
-Note that this run the last rank has no individual. This can happen when using counts, mainly if you choose model with high dominance like Dominance Preemption model.
+Note that in this run the last rank has no individual. This can happen when using counts, mainly if you choose a model with high dominance like Dominance Preemption model.
 
-The Power Fraction model differ from other model by the \code{w} parameter. It weight niche by its abundance when procedure select fraction to divide in two new. The follow simulation run with 10 species, 300 kg of biomass (abundance) and \code{w} equal to 0.2. 
+The Power Fraction model differ from other model by the \code{w} parameter. It weight niche portion by its abundance when procedure select fraction to divide in two new. The follow simulation run with 10 species, 300 kg of biomass (abundance) and \code{w} equal to 0.2. 
 
 <<powerFraction>>=
 powerFraction(N = 300, S = 10, w = 0.2)
@@ -69,7 +69,7 @@ powerFraction(N = 300, S = 10, w = 0.2)
 
 \section{Fitting}
 
-Fitting model to data can be ran using \code{fitmodel} or \code{fitmodelCl} functions. The last one run the fitting procedure using parallel computation. An abstract data will be created to exemplifying the fitting. This data will be 30 species and 10 replicates.
+Models can be fitted to data using \code{fitmodel} or \code{fitmodelCl} functions. The last one run the fitting procedure using parallel computation. An abstract data will be created to exemplifying the fitting. This data will have 30 species, 10 replicates and total abundance at each replicates 500 kg of biomass.
 
 <<create-data>>=
 data <- matrix(nrow = 10, ncol = 30)
@@ -78,7 +78,7 @@ for(i in 1:dim(data)[1]){
 }
 @
 
-Now, running the fitting function and show the result of fitting (for Random Fraction and MacArthur Fraction models).
+Now, run the fitting function and show the result of fitting (for Random Fraction and MacArthur Fraction models).
 
 <<fitmodel>>=
 m1 <- fitmodel(x = data, model = "randFraction", 
@@ -92,7 +92,7 @@ m2
 
 \section{Plotting}
 
-The rank abundance can be plotted using function \code{plot}. It will plot the observed logarithm at base 2 of the mean of each rank for all replicates. To add the simulated line of the models use function \code{lines}. The \code{range} parameter will plot minimum and maximum of the simulated values.
+The rank abundance can be plotted using function \code{plot}. It will plot the observed logarithm at base 2, for instance, of the mean of each rank for all replicates. To add the simulated line of the models use function \code{lines}. The \code{range} parameter will plot minimum and maximum of the simulated values.
 
 <<plot, fig.height=5, fig.width=5, fig.align="center">>=
 plot(m1, stat = "mean", base = 2)
@@ -104,7 +104,7 @@ legend("topright", lty = 1, col = c("blue", "red"), bty = "n",
        legend = c("Random Fraction", "MacArthur Fraction"))
 @
 
-To confirm which rank is within simulation use \code{qqplot}. It will plot the simulated abundance against observed abundances highlighting the rank out of simulated abundances (grey colour).
+You can confirm which rank is within simulation checking previous plot or use \code{qqplot}. It will plot the simulated abundance against observed abundances highlighting the observed values out of simulated abundances (grey colour).
 
 <<qqplot, fig.height=5, fig.width=10, fig.align="center">>=
 par(mfrow = c(1,2))
@@ -114,7 +114,7 @@ qqplot(m2, stat = "mean", base = 2, range = TRUE,
        main = "MacArthur Fraction")
 @
 
-The fitting procedure calculate the \code{T} statistics to confirm with model fit to data. To plot the simulates values of \code{T} use the function \code{hist}.
+The fitting procedure calculate the \code{T} statistics to confirm with model fit to data. To plot the simulated values of \code{T} use the function \code{hist}.
 
 <<hist, fig.height=5, fig.width=10, fig.align="center">>=
 par(mfrow = c(1,2))
