@@ -1,4 +1,6 @@
 1.1.0 (next release)
+* Add news arguments to control plots color and line type
+* Bux fix to plot and fit discrete data
 * Add vignette 'Quick Reference for nicheApport'
 * Update documentation
 * Improve fitmode and fitmodelCl functions
