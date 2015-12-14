@@ -1,5 +1,8 @@
 1.1.0 (next release)
-* Add news arguments to control plots color and line type
+* Improve runtime of functions
+* Joined documentation of randFraction and MacArthurFraction to powerFraction
+* Bug fix to dominancePreemp that return ranks with 0 when using continuous
+* Add news arguments to control plots colours and line type
 * Bux fix to plot and fit discrete data
 * Add vignette 'Quick Reference for nicheApport'
 * Update documentation
