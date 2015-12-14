@@ -11,7 +11,7 @@
 }
 
 \usage{
-	randFraction(N, S, count = FALSE)
+  randFraction(N, S, count = FALSE)
   powerFraction(N, S, w = 0.2, count = FALSE)
   MacArthurFraction(N, S, count = FALSE)
 }
