@@ -3,3 +3,18 @@ export(dominanceDecay, dominancePreemp, MacArthurFraction, powerFraction, randAs
 
 # Export fitting function
 export(fitmodel, fitmodelCl, findPFw)
+
+# Export Classes
+exportClasses(fitmodel)
+
+# Export methods
+exportMethods(plot, lines, qqplot, hist, show)
+
+# Import function from packages
+importFrom("graphics", plot, lines, hist)
+
+# Import packages
+import(
+    parallel,
+    methods
+)

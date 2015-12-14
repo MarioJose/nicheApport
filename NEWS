@@ -1,3 +1,15 @@
+1.1.0 (2015-12-14)
+* Improve runtime of functions
+* Joined documentation of randFraction and MacArthurFraction to powerFraction
+* Bug fix to dominancePreemp that return ranks with 0 when using continuous
+* Add news arguments to control plots colours and line type
+* Bux fix to plot and fit discrete data
+* Add vignette 'Quick Reference for nicheApport'
+* Update documentation
+* Improve fitmode and fitmodelCl functions
+* Add methods to plot rank abundance, simulated model line, qqplot of observed and simulated data and histogram of distribution of T value
+* Now fitmodel and fitmodelCl return object of class 'fitmodel'
+
 1.0.2 (2015-12-04)
 * fitmodel and fitmodelCl now return simulation range
 * Update interpretation of p-value in help files
