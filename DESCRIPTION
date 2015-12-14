@@ -13,5 +13,5 @@ VignetteBuilder: knitr
 BuildVignettes: yes
 NeedsCompilation: no
 Version: 1.1.0
-Date: 2015-12-07
+Date: 2015-12-14
 URL: http://mariojose.github.io/nicheApport/, https://github.com/mariojose/nicheApport
