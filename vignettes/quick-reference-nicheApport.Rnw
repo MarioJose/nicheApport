@@ -8,9 +8,11 @@
 \usepackage{url}
 \usepackage{setspace} % Line spacing
 
+%\VignetteIndexEntry{Quick reference for nicheApport package usage}
+%\VignetteEngine{knitr::knitr}
 \title{Quick reference for \code{nicheApport} package usage}
 \author{Mario J. Marques-Azevedo}
-\date{December 11, 2015}
+\date{December 14, 2015}
 
 \newcommand{\code}[1]{\texttt{#1}} % Command code
 
@@ -19,6 +21,10 @@
 \onehalfspacing
 
 \begin{document}
+
+<<knitropts, echo=FALSE, message=FALSE>>=
+library(knitr)
+@ 
 
 \maketitle
 
