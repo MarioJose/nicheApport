@@ -1,4 +1,4 @@
-1.1.0 (next release)
+1.1.0 (2015-12-14)
 * Improve runtime of functions
 * Joined documentation of randFraction and MacArthurFraction to powerFraction
 * Bug fix to dominancePreemp that return ranks with 0 when using continuous
