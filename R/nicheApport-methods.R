@@ -32,12 +32,13 @@ setMethod(f = "plot", signature = "fitmodel",
           })
 
 setMethod(f = "lines", signature = "fitmodel", 
-          definition = function(x, stat = "mean", base = NULL, range = FALSE, range.lty = 2, range.col = "black", ...){
+          definition = function(x, stat = "mean", base = NULL, range = FALSE, range.lty = 2, range.col = NULL, ...){
             dots <- list(...)
             if(!stat %in% c("mean", "variance")) 
               stop("'stat' parameter must be 'mean' or 'variance'")
             
             if(!"col" %in% names(dots)) dots$col <- "blue"
+            if(is.null(range.col)) range.col <- dots$col
             
             sim.sta <- x@sim.stats[stat, ]
             sim.min <- x@sim.range[[stat]]["min", ]
@@ -58,7 +59,7 @@ setMethod(f = "lines", signature = "fitmodel",
 
 setMethod(f = "qqplot", signature = "fitmodel", 
           definition = function(x, stat = "mean", base = NULL, range = FALSE, 
-                                qqline = TRUE, range.lty = 2, range.col = "black",
+                                qqline = TRUE, range.lty = 2, range.col = NULL,
                                 in.col = "black", out.col = "grey70", ...){
             dots <- list(...)
             if(!stat %in% c("mean", "variance")) 
@@ -76,17 +77,18 @@ setMethod(f = "qqplot", signature = "fitmodel",
             }
             if(!"lty" %in% names(dots)) dots$lty <- 1
             if(!"col" %in% names(dots)) dots$col <- "black"
+            if(is.null(range.col)) range.col <- dots$col
 
             obs.sta <- x@obs.stats[stat, ]
             sim.sta <- x@sim.stats[stat, ]
             sim.min <- x@sim.range[[stat]]["min", ]
             sim.max <- x@sim.range[[stat]]["max", ]
-                        
+            min.fil <- sim.min > 0
+            max.fil <- sim.max > 0
+            
             if(!is.null(base)){
               obs.sta <- log(obs.sta, base)
               sim.sta <- log(sim.sta[sim.sta > 0], base)
-              min.fil <- sim.min > 0
-              max.fil <- sim.max > 0
               sim.min[min.fil] <- log(sim.min[min.fil], base)
               sim.max[max.fil] <- log(sim.max[max.fil], base)
             }

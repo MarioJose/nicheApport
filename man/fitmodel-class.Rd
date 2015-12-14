@@ -72,7 +72,7 @@
     \item{out.col}{Character informing the color of observed non fitted values (out of simulated range).}
     \item{qqline}{Logical informing if qqline must be plotted.}
     \item{range}{Logical informing if minimum and maximum line must be plotted.}
-    \item{range.col}{Character informing the color of range plot.}
+    \item{range.col}{Character informing the color of range plot. When \code{NULL} (default) is equal to \code{col}.}
     \item{range.lty}{Numerical informing the line type of range plot.}
     \item{stat}{Character informing if line must be plotted using mean (\code{"mean"}) or variance (\code{"variance"}) of model simulation.}
   }}
