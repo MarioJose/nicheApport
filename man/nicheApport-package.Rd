@@ -15,9 +15,9 @@
   \tabular{ll}{
     Package: \tab nicheApport\cr
     Type: \tab Package\cr
-    Version: \tab 1.0.1\cr
-    Date: \tab 2015-11-11\cr
-    License: \tab GPL-3\cr
+    Version: \tab 1.1.0\cr
+    Date: \tab 2015-12-14\cr
+    License: \tab GPL-2\cr
   }
   
   Species abundance distributions may be described by statistical distribution models or niche partitioning approach. Tokeshi (1990 ,1996) proposed six stochastic niche partition models following some rules for this partition niche. Each of this models propose to explain how total niche can be apportioned among species of a community. Although Tokeshi (1990) proposed a goodness-of-fit to distinguish among models, the Monte Carlo approach proposed by Bersier & Sugihara, and improved by Cassey & King (2001) and Mouillot et al. (2003), correct some misleading of the first proposal. The \pkg{nicheApport} package provides:
