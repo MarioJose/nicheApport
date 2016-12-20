@@ -2,7 +2,7 @@
 
 #### Tokeshi's Niche Apportionment Species Abundance Distributions Models
 
-**Mario Jose Marques-Azevedo**
+**Mario J. Marques-Azevedo**
 
 ### Description
 `nicheApport` package simulate and fit the stochastic niche-oriented species abundance distribution models proposed by Tokeshi (1990, 1996). This package simulate species rank abundance distributions (RADs) and use Monte Carlo approach, proposed by Bersier & Sugihara (1997) and improved by Cassey & King (2001) and Mouillot et al. (2003), to fit models to replicated data.
