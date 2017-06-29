@@ -35,3 +35,6 @@ This version have the last updates waiting to release.
 library(devtools)
 install_github(repo = "mariojose/nicheApport", ref = "dev", build_vignettes = TRUE)
 ```
+
+Note that if you running Microsft Windows, you need to install the [`Rtools`](https://cran.r-project.org/bin/windows/Rtools/index.html) package to build vignettes locally.
+
