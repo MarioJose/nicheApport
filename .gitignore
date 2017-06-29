@@ -1,1 +1,7 @@
 *.Rbuildignore
+
+# RStudio project files
+.Rproj.user/
+*.Rproj
+*.Rbuildignore
+.Rproj.user
