@@ -1,3 +1,7 @@
+1.1.1 (2017-11-28)
+* Add description how to get slots in S4 object
+* Update vignette and rewrite as rmarkdown file
+
 1.1.0 (2015-12-14)
 * Improve runtime of functions
 * Joined documentation of randFraction and MacArthurFraction to powerFraction
