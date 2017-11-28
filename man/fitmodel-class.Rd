@@ -99,6 +99,12 @@
   
   # Histogram
   hist(m1)
+
+  # List slots of S4 object slots
+  getSlots('fitmodel')
+  
+  # Get slot with simulated stattistics
+  m1@sim.stats
 }
 
 \keyword{classes}
