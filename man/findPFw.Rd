@@ -40,7 +40,7 @@
   \item{TVobs}{Observed value of \emph{T} for variance.}
   \item{pvalueM}{P-value for mean.}
   \item{pvalueV}{P-value for variance.}
-  For more information about values consult documentation of \code{\link{fitmodel}} or \code{\link{fitmodelCl}}.
+  For more information about values see documentation of \code{\link{fitmodel}} or \code{\link{fitmodelCl}}.
 }
 
 \references{
