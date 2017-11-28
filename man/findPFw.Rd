@@ -5,7 +5,7 @@
 \title{Find Power Fraction \code{w} parameter}
 
 \description{
-  This function call \code{\link{fitmodel}} or \code{\link{fitmodelCl}} to find the Power Fraction \code{w} parameter that best fit model to data. A sequence of \code{w} value will be created and fit procedures will check fit each of this \code{w} values to data.
+  This function call \code{\link{fitmodel}} or \code{\link{fitmodelCl}} to find the Power Fraction \code{w} parameter that best fit model to data. A sequence of \code{w} value will be created and fit procedures will check fit each of this \code{w} values fit to data.
 }
 
 \usage{
@@ -14,8 +14,8 @@
 
 \arguments{
   \item{x}{Data frame or matrix with total species rank (from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
-  \item{count}{Specify if measure of abundance is number of individuals. See 'Details' for more information.}
-  \item{ws}{Star value of Power Fraction \code{w} parameter.}
+  \item{count}{Define if measure of abundance is number of individuals. See 'Details' for more information.}
+  \item{ws}{Start value of Power Fraction \code{w} parameter.}
   \item{we}{End value of Power Fraction \code{w} parameter.}
   \item{f}{Number of increment to sequence of \code{w} values.}
   \item{nRand}{Number of simulations.}
@@ -30,7 +30,7 @@
   
   If \code{cl} is \code{TRUE} the function fit model to data calling \code{fitmodelCl} for parallel computation. This function divide the number of simulations among the processor cores or threads and run the procedures simultaneously. If \code{cl} is \code{FALSE} the function call \code{fitmodel} to fit model to data. When \code{nCores = 1} the function detect number of cores or threads automatically. If you inform incorrectly the number of cores or threads, the function will inform you to correct information or will recommend to use \code{fitmodel}. The overall process using parallel computation can be twice as fast, depending on the number of processor cores or threads used.
   
-  The \code{findPFw} function fit Power Fraction model with different \code{w} values and return information (see bellow 'Value') to choose the best \code{w}. The criteria can be the smallest values of \code{TMobs} or \code{TVobs} (Bersier & Sugihara 1997) or higher p-value (probability of found observed \emph{T} at simulated \emph{T}).
+  The \code{findPFw} function fit Power Fraction model with different \code{w} values and return information (see 'Value' bellow) to choose the best \code{w}. The criteria can be the smallest values of \code{TMobs} or \code{TVobs} (Bersier & Sugihara 1997) or higher p-value (probability of found observed \emph{T} at simulated \emph{T}).
 }
 
 \value{

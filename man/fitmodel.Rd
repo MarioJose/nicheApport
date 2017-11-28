@@ -17,7 +17,7 @@
 \arguments{
   \item{x}{Data frame or matrix with species ranks (ordered from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
   \item{model}{String containing one of follow values: "dominanceDecay", "dominancePreemp", "MacArthurFraction", "powerFraction", "randAssort", "randFraction".}
-  \item{count}{Specify if measure of abundance is number of individuals. See 'Details' for more information.}
+  \item{count}{Define if measure of abundance is number of individuals. See 'Details' for more information.}
   \item{nRand}{Number of simulations.}
   \item{nCores}{Number indicating number of processor cores or threads to be used for simulation. See 'Details' for more information.}
   \item{\dots}{Arguments to be passed to functions. This is used when fit Power Fraction model to inform value of parameter \code{w}.}

@@ -20,7 +20,7 @@
   \item{N}{Total abundance. See 'Details' for more information.}
   \item{S}{Number of species.}
   \item{w}{Exponential parameter to weighting fraction selection by abundance. See 'Details' for more information.}
-  \item{count}{Specify if measure of abundance is number of individuals. See 'Details' for more information.}
+  \item{count}{Define if measure of abundance is number of individuals. See 'Details' for more information.}
 }
 
 \details{
