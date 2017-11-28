@@ -11,7 +11,7 @@ Depends:
 Imports: 
   graphics
 Suggests: 
-  knitr
+  knitr, rmarkdown
 Description: Simulate and fit, using Monte Carlo approach, rank abundance 
   distribution to niche apportionment species abundance distributions models.
 License: GPL-2
