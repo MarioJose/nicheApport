@@ -82,7 +82,7 @@
   
   For fit models see \code{\link{fitmodel}}. To find best \code{w} parameter to \code{\link{powerFraction}} see \code{\link{findPFw}}.
   
-  For class \code{fitmodel} see \link{fitmodel-class}.
+  For class see \code{\linkS4class{fitmodel}}.
 }
 \examples{
   data <- matrix(nrow = 10, ncol = 40)
@@ -91,4 +91,7 @@
   }
   m1 <- fitmodelCl(x = data, model = "randFraction", count = FALSE, nRand = 99, nCores = 2)
   m1
+
+  # Get simulated data statistics
+  m1@sim.stats
 }
