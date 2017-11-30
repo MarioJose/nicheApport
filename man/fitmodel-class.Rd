@@ -58,10 +58,10 @@
 \section{Methods}{
   \describe{
     \item{hist}{\code{signature(x = "fitmodel")}: Plot histogram of simulated \emph{T} values. Arguments are: \code{stat} and \code{arrow.col}.}
-    \item{lines}{\code{signature(x = "fitmodel")}: Plot line of fitted model. Arguments are: \code{stat}, \code{base}, \code{range}, \code{range.lty} and \code{range.col}.}
-    \item{plot}{\code{signature(x = "fitmodel")}: Plot ranked abundance. Arguments are: \code{stat} and \code{base}.}
-    \item{qqplot}{\code{signature(x = "fitmodel")}: Quantile-Quantile plot. Arguments are: \code{stat}, \code{base}, \code{range}, \code{qqline}, \code{range.lty}, \code{range.col}, \code{in.col} and \code{out.col}.}
-    \item{show}{\code{signature(object = "fitmodel")}: Display object.}
+    \item{lines}{\code{signature(x = "fitmodel")}: Plot line of fitted model (mean of the each rank of the simulation for the model). Arguments are: \code{stat}, \code{base}, \code{range}, \code{range.lty} and \code{range.col}.}
+    \item{plot}{\code{signature(x = "fitmodel")}: Plot the ranked observed abundance (mean of each rank of the observed data). Arguments are: \code{stat} and \code{base}.}
+    \item{qqplot}{\code{signature(x = "fitmodel")}: Quantile-Quantile plot (mean of observed data versus mean of fitted model). Arguments are: \code{stat}, \code{base}, \code{range}, \code{qqline}, \code{range.lty}, \code{range.col}, \code{in.col} and \code{out.col}.}
+    \item{show}{\code{signature(object = "fitmodel")}: Display the object summary.}
 	}
   
   \subsection{Arguments}{
@@ -105,6 +105,9 @@
   
   # Get slot with simulated stattistics
   m1@sim.stats
+
+  # Get slot with observed data
+  m1@obs.stats
 }
 
 \keyword{classes}
