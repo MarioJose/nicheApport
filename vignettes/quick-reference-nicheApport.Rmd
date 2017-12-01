@@ -1,7 +1,7 @@
 ---
 title: "Quick reference for nicheApport package usage"
 author: Mario J. Marques-Azevedo
-date: "November 29, 2017"
+date: "December 1, 2017"
 output: rmarkdown::pdf_document
 papersize: a4
 documentclass: article
@@ -14,9 +14,10 @@ vignette: >
 bibliography: nicheApport.bib
 csl: oikos.csl
 ---
-<!--\bibliography{nicheApport.bib}-->
 
 ```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, collapse = TRUE, message = FALSE, comment = ">")
+
 library(nicheApport)
 options(width = 60)
 ```
