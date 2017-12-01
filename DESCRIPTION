@@ -18,5 +18,5 @@ License: GPL-2
 Encoding: UTF-8
 VignetteBuilder: knitr
 NeedsCompilation: no
-URL: http://mariojose.github.io/nicheApport/, https://github.com/mariojose/nicheApport
+URL: https://github.com/mariojose/nicheApport
 BugReports: https://github.com/mariojose/nicheApport/issues
