@@ -6,16 +6,15 @@
 \title{Fitting of species rank abundance distribution to data}
 
 \description{
-  Fits niche apportionment models, proposed by Tokeshi (1990, 1996), using procedures proposed by Bersier & Sugihara (1997) and modified by Cassey & King (2001) and Mouillot et al. (2003). The protocol use relative abundance to fit simulated species rank abundance of particular model to observed rank abundance using Monte Carlo approach. The \code{fitmodelCl} function use parallel computation for run simulations.
+  Fits niche apportionment models, proposed by Tokeshi (1990, 1996), to data using procedures proposed by Bersier & Sugihara (1997) and modified by Cassey & King (2001) and Mouillot et al. (2003). The protocol use relative abundance to fit simulated species rank abundance of particular model to observed rank abundance using Monte Carlo approach. The \code{fitmodelCl} function use parallel computation for run simulations.
 }
 
 \usage{
   fitmodel(x, model, count, nRand = 999, \dots)
   fitmodelCl(x, model, count, nRand = 999, nCores = 2, \dots)
 }
-
 \arguments{
-  \item{x}{Data frame or matrix with species ranks (ordered from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
+  \item{x}{Data frame or matrix with observed species ranks (ordered from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
   \item{model}{String containing one of follow values: "dominanceDecay", "dominancePreemp", "MacArthurFraction", "powerFraction", "randAssort", "randFraction".}
   \item{count}{Define if measure of abundance is number of individuals. See 'Details' for more information.}
   \item{nRand}{Number of simulations.}
@@ -27,11 +26,11 @@
 }
 
 \details{
-  The replicates in data frame or matrix \code{x} must be in rows and ranked by abundance. First rank (column 1) will be species with largest abundance, second column with second largest abundance, and so on until the species with smallest abundance. Note that this protocol do not require species identification. First rank of replicates 1, for instance, may be not the same as first rank of replicates 2. Note too that number of species may be differ among replicates. In this case, zeros must be used to the rank(s).
+  The observed replicates in data frame or matrix \code{x} must be in rows and ranked by abundance. First rank (column 1) must be of the species with largest abundance, second column with second largest abundance, and so on until the species with smallest abundance. Note that this protocol do not require species identification. First rank of replicates 1, for instance, may not be the same as first rank of replicates 2. Note too that number of species may be differ among replicates. In this case, zeros must be used to the rank(s).
   
   The fit use the protocol proposed by Cassey & King (2001) and ranked relative abundance recommendations by Mouillot et al. (2003), with some modifications, as the follow:
   \enumerate{
-    \item{Run ranked observed abundance of specified model of each replicates, retaining the total abundance and number of ranks present in each replicate. Transform simulated abundance to relative abundance and calculate mean (\code{M}) and variance (\code{V}) of each rank for all replicates \code{n}. This procedures is repeated \code{nRand} times and result in \code{nRand} \code{M} and \code{V} for all \code{S} ranks.}
+    \item{Run specific model for ranked observed abundance of each replicates, retaining the total abundance and number of ranks present in each replicate. Transform simulated abundance to relative abundance and calculate mean (\code{M}) and variance (\code{V}) of each rank for all replicates \code{n}. This procedures is repeated \code{nRand} times and result in \code{nRand} \code{M} and \code{V} for all \code{S} ranks.}
     \item{Transform observed abundance of each replicates in relative abundance, retaining the rank.}
     \item{Calculate mean (\code{M0}) and variance (\code{V0}) of each rank for observed replicates.}
     \item{Calculate the estimated p-value for mean of each rank \code{M0[S]} in \code{nRand} simulated rank \code{M[S]}:
@@ -85,11 +84,16 @@
   For class see \code{\linkS4class{fitmodel}}.
 }
 \examples{
+  # Creating an (abstract) observed data
   data <- matrix(nrow = 10, ncol = 40)
   for(i in 1:length(data[ ,1])){
     data[i, ] <- randFraction(N = 100, S = 40, count = FALSE)
   }
+
+  # Fitting Random Fraction to (abstract) observed data
   m1 <- fitmodelCl(x = data, model = "randFraction", count = FALSE, nRand = 99, nCores = 2)
+
+  # Show fitting result
   m1
 
   # Get simulated data statistics
