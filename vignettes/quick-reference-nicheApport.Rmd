@@ -1,0 +1,180 @@
+---
+title: "Quick reference for nicheApport package usage"
+author: Mario J. Marques-Azevedo
+date: "December 1, 2017"
+output: rmarkdown::pdf_document
+papersize: a4
+documentclass: article
+linestretch: 1.3
+geometry: left=4cm, right=4cm, top=2cm, bottom=2cm
+vignette: >
+  %\VignetteIndexEntry{Quick reference for nicheApport package usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+bibliography: nicheApport.bib
+csl: oikos.csl
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, collapse = TRUE, message = FALSE, comment = ">")
+
+library(nicheApport)
+options(width = 60)
+```
+
+#Introduction
+
+Species abundance distribution (SAD) is one of the basic description of ecological communities data [@mcgill_species_2007]. One way to represent the distribution of species abundance is to plot the ranked abundances from highest to lowest on x-axis and the abundance on y-axis (known too as MacArthur plot). Niche apportionment models were proposed to be a biological model to describe SAD [@tokeshi_niche_1990; @tokeshi_power_1996; @matthews_fitting_2014]. This models assume that total niche are sequentially divided between species [@tokeshi_niche_1990; @matthews_fitting_2014]. There are proposed procedures to fit niche apportionment model to data [@tokeshi_niche_1990; @bersier_species_1997; @cassey_problem_2001; @mouillot_how_2003], but no one open source tool to do this. This package simulate species rank abundance distributions (RAD) and use Monte Carlo approach, proposed by @bersier_species_1997, @cassey_problem_2001 and @mouillot_how_2003 to fit model to replicated data.
+
+
+#Installation
+
+The package can be installed using _devtools_ package on R. For a stable version use the _master_ branch:
+
+```{r install-master, eval=FALSE}
+library(devtools)
+install_github(repo = "mariojose/nicheApport", ref = "master")
+```
+
+For a development version use a _dev_ branch:
+
+```{r install-dev, eval=FALSE}
+library(devtools)
+install_github(repo = "mariojose/nicheApport", ref = "dev")
+```
+
+
+#Models
+
+The _nicheApport_ package simulate the six models proposed by Tokeshi [-@tokeshi_niche_1990; -@tokeshi_power_1996]: Dominance Decay, Dominance Preemption, MacArthur Fraction, Random Fraction, Random Assortment and Power Fraction.
+
+Before start the simulations, we need to load the package:
+
+```{r load-library, message=FALSE}
+library(nicheApport)
+```
+
+For simulate one of possible results under Random Fraction model let's run _randFraction_ function. We will define a model with 10 species and total abundance of 150 individuals.
+
+```{r randFraction}
+set.seed(42)
+randFraction(N = 150, S = 10, count = TRUE)
+```
+
+Note that in this run the last rank has no individual. This can happen when using counts, mainly if you choose a model with high dominance like Dominance Preemption model. This result is one of possible results under Random Fraction model with 10 species and 150 individuals as total abundance. You can run 100 times, for instance, the command _randFraction_, or for any other model, and calculate mean and variance for each rank to represent the possibilities for the model. In practice, this is the procedure to fit model to the data. Regards are described in 'Fitting' section.
+
+```{r meam_var_model}
+set.seed(42)
+
+# Matrix with five simulations for the Random Fractioni model
+# with 10 species and 150 individuals
+sim_rf<- matrix(NA, nrow = 5, ncol = 10)
+
+for(i in 1:5){
+  sim_rf[i, ] <- randFraction(N = 150, S = 10, count = TRUE)
+}
+
+sim_rf
+
+# Mean of simulations for the Random Fraction model
+# with 10 species and 150 individuals
+apply(sim_rf, 2, mean)
+```
+
+The Power Fraction model differ from others model by the _w_ parameter. It weight niche portion by its abundance when the procedure select fraction to divide in two new fractions. The follow simulation run with 10 species, 300 kg of biomass (abundance) and _w_ equal to 0.2.
+
+```{r powerFraction}
+powerFraction(N = 300, S = 10, w = 0.2)
+```
+
+Again, you can simulate abundance many times and get mean or variance of each rank through simulation to get an expected statistic for the model.
+
+
+#Fitting
+
+Procedure to fitting model to data was created by @bersier_species_1997 and modified by @cassey_problem_2001 and @mouillot_how_2003. This procedure run a model many times and compare mean and variance of simulated model to mean and variance of the data. The functions _fitmodel_ or _fitmodelCl_ run this procedure. The last one run the fitting procedure using parallel computation.
+
+First, we will create a abstract data to exemplifying the fitting procedure. This data will have 30 species, 10 replicates and total abundance at each replicates of 500 kg of biomass. Replicates represents samples or plots in a site, for instance. We will use Random Fraction model to create the data.
+
+```{r create-data}
+comm <- matrix(nrow = 10, ncol = 30)
+for(i in 1:dim(comm)[1]){
+  comm[i, ] <- randFraction(N = 500, S = 30, count = FALSE)
+}
+```
+
+Now, we will run the fitting function and show the result of fitting (for Random Fraction and MacArthur Fraction models).
+
+```{r fitmodel}
+m_rf<- fitmodel(x = comm, model = "randFraction", 
+                count = FALSE, nRand = 99)
+
+m_mf<- fitmodel(x = comm, model = "MacArthurFraction", 
+                count = FALSE, nRand = 99)
+
+# Results for Random Fraction fitting
+m_rf
+
+# Results for MacArthur Fraction fitting
+m_mf
+```
+
+When you inform the name of object (_m\_rf_ or _m\_mf_), a summary of simulations is shown. _nicheAppot_ use S4 object system. This means that to get values from the objects you need to use '@' instead '$'. The object _m\_rf_ and _m\_mf_ are _fitmodel_ objects. To get the name of variables (slots) of _fitmodel_ object, you can use _getSlots_ function. You can know more about _fitmodel_ slots in _fitmodel_ or _fitmodelCl_ functions or _fitmodel_ class help.
+
+```{r getSlots}
+# Names of the slots of class 'fitmodel'
+getSlots('fitmodel')
+
+# Printing statistics (mean and variance) for simulated data
+# for Random Fraction simulation
+m_rf@sim.stats
+```
+
+#Plotting
+
+We can plot the rank abundance using function _plot_. It will plots the logarithm at base 2, for instance, of the mean of each observed rank for all replicates. Note that we use the object _m\_rf_, but we could to use the _m\_mf_ because both have a slot of observed data. To add the simulated line of the models use function _lines_. The _range_ parameter will plot minimum and maximum of the simulated values.
+
+```{r plot, fig.height=5, fig.width=5, fig.align="center"}
+# Plot mean of observed data
+plot(m_rf, stat = "mean", base = 2)
+
+# Line to Random Fraction model
+lines(m_rf, stat = "mean", base = 2, range = TRUE, col = "blue")
+
+# Line to MacArthur Fraction model
+lines(m_mf, stat = "mean", base = 2, range = TRUE, col = "red")
+
+legend("topright", lty = 1, col = c("blue", "red"), bty = "n",
+       legend = c("Random Fraction", "MacArthur Fraction"))
+```
+
+We can confirm which rank is within simulation checking previous plot or use _qqplot_ function. It will plot the simulated abundance against observed abundances highlighting the observed values out of simulated abundances (grey colour).
+
+```{r qqplot, fig.height=5, fig.width=10, fig.align="center"}
+par(mfrow = c(1,2))
+
+qqplot(m_rf, stat = "mean", base = 2, range = TRUE, 
+       main = "Random Fraction")
+
+qqplot(m_mf, stat = "mean", base = 2, range = TRUE, 
+       main = "MacArthur Fraction")
+```
+
+The fitting procedure calculate the _T_ statistics to confirm if model fit to data. To plot the simulated values of _T_ use the function _hist_.
+
+```{r hist, fig.height=5, fig.width=10, fig.align="center"}
+par(mfrow = c(1,2))
+
+hist(m_rf, stat = "mean", arrow.col = "blue", 
+     main = "Random Fraction")
+
+hist(m_mf, stat = "variance", arrow.col = "blue", 
+     main = "MacArthur Fraction")
+```
+
+#Reporting bugs
+
+The _nicheApport_ package project is hosted on GitHub (https://github.com/mariojose/nicheApport/) and bugs can be reported in issue section (https://github.com/mariojose/nicheApport/issues). Your feedback is very important.
+
+#Bibliography
+

@@ -14,20 +14,27 @@ setMethod(f = "plot", signature = "fitmodel",
             dots$yaxt <- "n"
             dots$xaxt <- "n"
             
-            if(!is.null(base)){
-              obs.stats <- log(x@obs.stats[stat, ], base)
-              yTicks <- axisTicks(range(obs.stats), log = FALSE, nint = 7)
+            if(!is.null(base)) obs.stats <- log(x@obs.stats[stat, ], base)
+            else obs.stats <- x@obs.stats[stat, ]
+
+            if(!"xlim" %in% names(dots)){
+              xTicksRange <- c(1, length(obs.stats))
+              xTicks <- axisTicks(xTicksRange, log = FALSE, nint = 7)
+              xTicks <- c(1, xTicks)
+            } else xTicks <- axisTicks(dots$xlim, log = FALSE, nint = 7)
+            
+            if("ylim" %in% names(dots))
+              yTicks <- axisTicks(dots$ylim, log = FALSE, nint = 7)
+            else {
+              if(!is.null(base))
+                yTicks <- axisTicks(range(obs.stats), log = FALSE, nint = 7)
+              else 
+                yTicks <- axisTicks(c(0, max(obs.stats)), log = FALSE, nint = 7)
             }
-            else{
-              obs.stats <- x@obs.stats[stat, ]
-              yTicks <- axisTicks(c(0, max(obs.stats)), log = FALSE, nint = 7)
-            }
-    
-            xTicks <- axisTicks(c(1, length(obs.stats)), log = FALSE, nint = 7)
             
             do.call(plot, c(list(x = obs.stats, bty = "n"), dots))
             
-            axis(1, c(1, xTicks))
+            axis(1, at = xTicks)
             axis(2, at = yTicks, las = 2)
           })
 

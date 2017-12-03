@@ -15,7 +15,7 @@
 \arguments{
   \item{N}{Total abundance. See 'Details' for more information.}
   \item{S}{Number of species.}
-  \item{count}{Specify if measure of abundance is number of individuals. See 'Details' for more information.}
+  \item{count}{Define if measure of abundance is number of individuals. See 'Details' for more information.}
 }
 
 \details{

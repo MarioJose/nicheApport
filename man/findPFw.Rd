@@ -5,7 +5,7 @@
 \title{Find Power Fraction \code{w} parameter}
 
 \description{
-  This function call \code{\link{fitmodel}} or \code{\link{fitmodelCl}} to find the Power Fraction \code{w} parameter that best fit model to data. A sequence of \code{w} value will be created and fit procedures will check fit each of this \code{w} values to data.
+  This function call \code{\link{fitmodel}} or \code{\link{fitmodelCl}} to find the Power Fraction \code{w} parameter that best fit model to data. A sequence of \code{w} value will be created and fit procedures will check fit each of this \code{w} values fit to data.
 }
 
 \usage{
@@ -13,9 +13,9 @@
 }
 
 \arguments{
-  \item{x}{Data frame or matrix with total species rank (from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
-  \item{count}{Specify if measure of abundance is number of individuals. See 'Details' for more information.}
-  \item{ws}{Star value of Power Fraction \code{w} parameter.}
+  \item{x}{Data frame or matrix with observed species rank (ordered from largest abundance to smallest) at columns and replicates at rows. See 'Details' for more information.}
+  \item{count}{Define if measure of abundance is number of individuals. See 'Details' for more information.}
+  \item{ws}{Start value of Power Fraction \code{w} parameter.}
   \item{we}{End value of Power Fraction \code{w} parameter.}
   \item{f}{Number of increment to sequence of \code{w} values.}
   \item{nRand}{Number of simulations.}
@@ -24,13 +24,13 @@
 }
 
 \details{
-  The replicates in data frame or matrix \code{x} must be in rows and ranked by abundance. First rank (column 1) will be species with largest abundance, second column with second largest abundance, and so on until the species with smallest abundance. Note that this protocol do not require species identification. First rank of replicates 1, for instance, may be not the same as first rank of replicates 2. Note too that number of species may be differ among replicates. In this case, zeros must be used to the rank(s).
+  The observed replicates in data frame or matrix \code{x} must be in rows and ranked by abundance. First rank (column 1) will be species with largest abundance, second column with second largest abundance, and so on until the species with smallest abundance. Note that this protocol do not require species identification. First rank of replicates 1, for instance, may be not the same as first rank of replicates 2. Note too that number of species may be differ among replicates. In this case, zeros must be used to the rank(s).
   
   The fitting use the protocol proposed by Bersier & Sugihara (1997) and modiffied by Cassey & King (2001) and ranked relative abundance recommendations by Mouillot et al. (2003), with some modifications. For more information of procedures consult documentation of \code{\link{fitmodel}} or \code{\link{fitmodelCl}}. Observed abundance fit to the model if p-value to means and variances are not significant at predetermined significance level (probability of found observed \emph{T} at simulated \emph{T}). The observed T value (TMobs or TVobs, see 'Value' bellow) measure how well model fits to data; better fit had smaller value (Bersier & Sugihara 1997).
   
   If \code{cl} is \code{TRUE} the function fit model to data calling \code{fitmodelCl} for parallel computation. This function divide the number of simulations among the processor cores or threads and run the procedures simultaneously. If \code{cl} is \code{FALSE} the function call \code{fitmodel} to fit model to data. When \code{nCores = 1} the function detect number of cores or threads automatically. If you inform incorrectly the number of cores or threads, the function will inform you to correct information or will recommend to use \code{fitmodel}. The overall process using parallel computation can be twice as fast, depending on the number of processor cores or threads used.
   
-  The \code{findPFw} function fit Power Fraction model with different \code{w} values and return information (see bellow 'Value') to choose the best \code{w}. The criteria can be the smallest values of \code{TMobs} or \code{TVobs} (Bersier & Sugihara 1997) or higher p-value (probability of found observed \emph{T} at simulated \emph{T}).
+  The \code{findPFw} function fit Power Fraction model with different \code{w} values and return information (see 'Value' bellow) to choose the \code{w} value that best fit Power Fraction to data. The criteria can be the smallest values of \code{TMobs} or \code{TVobs} (Bersier & Sugihara 1997) or higher p-value (probability of found observed \emph{T} at simulated \emph{T}).
 }
 
 \value{
@@ -40,7 +40,7 @@
   \item{TVobs}{Observed value of \emph{T} for variance.}
   \item{pvalueM}{P-value for mean.}
   \item{pvalueV}{P-value for variance.}
-  For more information about values consult documentation of \code{\link{fitmodel}} or \code{\link{fitmodelCl}}.
+  For more information about values see documentation of \code{\link{fitmodel}} or \code{\link{fitmodelCl}}.
 }
 
 \references{
@@ -66,9 +66,13 @@
 }
 
 \examples{
+  # Creating an (abstract) observed data
   data <- matrix(nrow = 10, ncol = 40)
   for(i in 1:length(data[ ,1])){
     data[i, ] <- powerFraction(N = 100, S = 40, w = 0.2, count = FALSE)
   }
+
+  # Fitting Power Fraction with a range of 'w' value and show
+  # statistics to choose the value that best fit to data
   findPFw(data, count = FALSE, ws = 0.16, we = 0.22, f = 0.01, nRand = 99, cl = TRUE, nCores = 2)
 }

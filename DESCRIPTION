@@ -1,17 +1,22 @@
 Package: nicheApport
 Type: Package
 Title: Tokeshi's Niche Apportionment Species Abundance Distributions Models
+Version: 1.1.1
+Date: 2017-12-03
 Author: Mario J. Marques-Azevedo
 Maintainer: Mario J. Marques-Azevedo <mariojmaaz@gmail.com>
-Description: Simulate and fit, using Monte Carlo approach, rank abundance distribution to niche apportionment species abundance distributions models.
+Depends: 
+  parallel, 
+  methods
+Imports: 
+  graphics
+Suggests: 
+  knitr, rmarkdown
+Description: Simulate and fit, using Monte Carlo approach, rank abundance 
+  distribution to niche apportionment species abundance distributions models.
 License: GPL-2
 Encoding: UTF-8
-Depends: parallel, methods
-Imports: graphics
-Suggests: knitr
 VignetteBuilder: knitr
-BuildVignettes: yes
 NeedsCompilation: no
-Version: 1.1.0
-Date: 2015-12-14
-URL: http://mariojose.github.io/nicheApport/, https://github.com/mariojose/nicheApport
+URL: https://github.com/mariojose/nicheApport
+BugReports: https://github.com/mariojose/nicheApport/issues

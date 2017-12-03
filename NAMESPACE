@@ -11,7 +11,9 @@ exportClasses(fitmodel)
 exportMethods(plot, lines, qqplot, hist, show)
 
 # Import function from packages
-importFrom("graphics", plot, lines, hist)
+importFrom("grDevices", "axisTicks")
+importFrom("graphics", "plot", "lines", "hist", "arrows", "axis", "legend", "points")
+importFrom("stats", "runif", "var")
 
 # Import packages
 import(
