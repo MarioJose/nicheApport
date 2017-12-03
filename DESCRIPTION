@@ -2,7 +2,7 @@ Package: nicheApport
 Type: Package
 Title: Tokeshi's Niche Apportionment Species Abundance Distributions Models
 Version: 1.1.1
-Date: 2017-11-28
+Date: 2017-12-03
 Author: Mario J. Marques-Azevedo
 Maintainer: Mario J. Marques-Azevedo <mariojmaaz@gmail.com>
 Depends: 

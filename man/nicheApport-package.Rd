@@ -16,7 +16,7 @@
     Package: \tab nicheApport\cr
     Type: \tab Package\cr
     Version: \tab 1.1.1\cr
-    Date: \tab 2017-11-28\cr
+    Date: \tab 2017-12-03\cr
     License: \tab GPL-2\cr
   }
   
